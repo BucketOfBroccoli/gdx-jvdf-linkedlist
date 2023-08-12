@@ -1,0 +1,13 @@
+"root_node"
+{
+    "long"     "123456"
+    "int"      "100"
+    "double"   "10E2"
+    "float"    "123.456"
+    "boolean"  "true"
+    "string"   "Test!"
+    "char"     "a"
+    "color"    "1 1.0 1.0 1"
+    "vec3"     "1.0 1 1"
+    "vec2"     "0 1"
+}
