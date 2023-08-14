@@ -44,8 +44,6 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation 'com.github.AreteS0ftware:couscous:1.0.0'
-
         implementation 'junit:junit:4.13.2'
         testImplementation 'junit:junit:4.13.2'
     }

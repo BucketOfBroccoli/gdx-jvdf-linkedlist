@@ -50,6 +50,135 @@ public class VDFValuesTest {
     }
 
     @Test
+    public void isNumberHexadecimal() {
+        // #
+        Assert.assertTrue(vdf.isNumber("#ABCDEF"));
+        Assert.assertTrue(vdf.isNumber("#aBcDeF"));
+        Assert.assertTrue(vdf.isNumber("#abcdef"));
+        Assert.assertTrue(vdf.isNumber("+#ABCDEF"));
+        Assert.assertTrue(vdf.isNumber("-#abcdef"));
+        Assert.assertTrue(vdf.isNumber("#a0b1c2D3E4"));
+        Assert.assertTrue(vdf.isNumber("#0123456789"));
+        Assert.assertTrue(vdf.isNumber("+#A0B1C2D3E4"));
+        Assert.assertTrue(vdf.isNumber("-#0123456789"));
+        Assert.assertFalse(vdf.isNumber("#F33G1"));
+        Assert.assertFalse(vdf.isNumber("+#F33G1"));
+        Assert.assertFalse(vdf.isNumber("-#F33G1"));
+        Assert.assertFalse(vdf.isNumber("#01234.56789"));
+        Assert.assertFalse(vdf.isNumber("#ABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("#A0B1C2.D3E4F5"));
+        Assert.assertFalse(vdf.isNumber("-#01234.56789"));
+        Assert.assertFalse(vdf.isNumber("+#ABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("-#A0B1C2.D3E4F5"));
+        // 0X
+        Assert.assertTrue(vdf.isNumber("0XABCDEF"));
+        Assert.assertTrue(vdf.isNumber("0XaBcDeF"));
+        Assert.assertTrue(vdf.isNumber("0Xabcdef"));
+        Assert.assertTrue(vdf.isNumber("+0XABCDEF"));
+        Assert.assertTrue(vdf.isNumber("-0Xabcdef"));
+        Assert.assertTrue(vdf.isNumber("0Xa0b1c2D3E4"));
+        Assert.assertTrue(vdf.isNumber("0X0123456789"));
+        Assert.assertTrue(vdf.isNumber("+0XA0B1C2D3E4"));
+        Assert.assertTrue(vdf.isNumber("-0X0123456789"));
+        Assert.assertFalse(vdf.isNumber("0XF33G1"));
+        Assert.assertFalse(vdf.isNumber("+0XF33G1"));
+        Assert.assertFalse(vdf.isNumber("-0XF33G1"));
+        Assert.assertFalse(vdf.isNumber("0X01234.56789"));
+        Assert.assertFalse(vdf.isNumber("0XABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("0XA0B1C2.D3E4F5"));
+        Assert.assertFalse(vdf.isNumber("-0X01234.56789"));
+        Assert.assertFalse(vdf.isNumber("+0XABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("-0XA0B1C2.D3E4F5"));
+        // 0x
+        Assert.assertTrue(vdf.isNumber("0xABCDEF"));
+        Assert.assertTrue(vdf.isNumber("0xaBcDeF"));
+        Assert.assertTrue(vdf.isNumber("0xabcdef"));
+        Assert.assertTrue(vdf.isNumber("+0xABCDEF"));
+        Assert.assertTrue(vdf.isNumber("-0xabcdef"));
+        Assert.assertTrue(vdf.isNumber("0xa0b1c2D3E4"));
+        Assert.assertTrue(vdf.isNumber("0x0123456789"));
+        Assert.assertTrue(vdf.isNumber("+0xA0B1C2D3E4"));
+        Assert.assertTrue(vdf.isNumber("-0x0123456789"));
+        Assert.assertFalse(vdf.isNumber("0xF33G1"));
+        Assert.assertFalse(vdf.isNumber("+0xF33G1"));
+        Assert.assertFalse(vdf.isNumber("-0xF33G1"));
+        Assert.assertFalse(vdf.isNumber("0x01234.56789"));
+        Assert.assertFalse(vdf.isNumber("0xABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("0xA0B1C2.D3E4F5"));
+        Assert.assertFalse(vdf.isNumber("-0x01234.56789"));
+        Assert.assertFalse(vdf.isNumber("+0xABC.DEF"));
+        Assert.assertFalse(vdf.isNumber("-0xA0B1C2.D3E4F5"));
+    }
+
+    @Test
+    public void isNumberScientificNotation() {
+        // Unsigned
+        Assert.assertTrue(vdf.isNumber("1.2846202978398e+19"));
+        Assert.assertTrue(vdf.isNumber("1e3"));
+        Assert.assertTrue(vdf.isNumber("100e5"));
+        // Signed
+        Assert.assertTrue(vdf.isNumber("-1.2846202978398e+19"));
+        Assert.assertTrue(vdf.isNumber("+1e3"));
+        Assert.assertTrue(vdf.isNumber("-100e5"));
+        // Unsigned exponent w/ trail
+        Assert.assertTrue(vdf.isNumber("1.57e3f"));
+        Assert.assertTrue(vdf.isNumber("1.57e3F"));
+        Assert.assertTrue(vdf.isNumber("1.57e3d"));
+        Assert.assertTrue(vdf.isNumber("1.57e3D"));
+        // Signed exponent w/ trail
+        Assert.assertTrue(vdf.isNumber("1.57e-3f"));
+        Assert.assertTrue(vdf.isNumber("1.57e+3F"));
+        Assert.assertTrue(vdf.isNumber("1.57e+3d"));
+        Assert.assertTrue(vdf.isNumber("1.57e-3D"));
+        // Edge cases
+        Assert.assertTrue(vdf.isNumber("0.e3"));
+        Assert.assertTrue(vdf.isNumber("0.e3f"));
+        Assert.assertFalse(vdf.isNumber(".e3"));
+        Assert.assertFalse(vdf.isNumber(".e-3"));
+    }
+
+    @Test
+    public void isNumberInteger() {
+        // Unsigned integer
+        Assert.assertTrue(vdf.isNumber("321"));
+        Assert.assertTrue(vdf.isNumber("123"));
+        Assert.assertTrue(vdf.isNumber("999"));
+        // Signed integer
+        Assert.assertTrue(vdf.isNumber("-321"));
+        Assert.assertTrue(vdf.isNumber("+123"));
+        Assert.assertTrue(vdf.isNumber("-999"));
+    }
+
+    @Test
+    public void isNumberDecimal() {
+        // Unsigned decimal
+        Assert.assertTrue(vdf.isNumber("1.0"));
+        Assert.assertTrue(vdf.isNumber("0.1"));
+        Assert.assertTrue(vdf.isNumber("0.12345"));
+        // Unsigned decimal w/ trail
+        Assert.assertTrue(vdf.isNumber("0.1f"));
+        Assert.assertTrue(vdf.isNumber("0.1F"));
+        Assert.assertTrue(vdf.isNumber("0.1d"));
+        Assert.assertTrue(vdf.isNumber("0.1D"));
+        // Signed decimal
+        Assert.assertTrue(vdf.isNumber("+1.0"));
+        Assert.assertTrue(vdf.isNumber("-0.1"));
+        Assert.assertTrue(vdf.isNumber("-0.12345"));
+        // Signed decimal w/ trail
+        Assert.assertTrue(vdf.isNumber("+0.1f"));
+        Assert.assertTrue(vdf.isNumber("-0.1F"));
+        Assert.assertTrue(vdf.isNumber("+0.1d"));
+        Assert.assertTrue(vdf.isNumber("-0.1D"));
+        // Edge cases
+        Assert.assertTrue(vdf.isNumber("1.f"));
+        Assert.assertTrue(vdf.isNumber("0.f"));
+        Assert.assertTrue(vdf.isNumber("0.d"));
+        Assert.assertFalse(vdf.isNumber(".f"));
+        Assert.assertFalse(vdf.isNumber(".d"));
+    }
+
+
+    @Test
     public void toNumber() {
         // Float & Double
         final float delta = 0.00000001f;

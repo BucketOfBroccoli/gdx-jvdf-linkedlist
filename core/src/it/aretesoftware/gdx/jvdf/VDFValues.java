@@ -1,10 +1,5 @@
 package it.aretesoftware.gdx.jvdf;
 
-import static it.aretesoftware.couscous.NumberUtils.isDecimal;
-import static it.aretesoftware.couscous.NumberUtils.isHexadecimal;
-import static it.aretesoftware.couscous.NumberUtils.isInteger;
-import static it.aretesoftware.couscous.NumberUtils.isNumber;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,10 +29,144 @@ public class VDFValues {
         else if (isBoolean(value)) {
             return toBoolean(value);
         }
-        else if (isNumber(value)) {
-            return toNumber(value);
+        else {
+            NumberType type = getNumberType(value);
+            if (type != NumberType.nan) {
+                return toNumber(value, type);
+            }
         }
         return value;
+    }
+
+    public boolean isNumber(String value) {
+        return getNumberType(value) != NumberType.nan;
+    }
+
+    private NumberType getNumberType(String value) {
+        boolean possibleHexadecimal = false;
+        boolean possibleDecimal = false;
+        boolean possibleScientificNotation = false;
+        boolean signed = false;
+        int dotIndex = -1, exponentIndex = -1;
+
+        char[] charArray = value.toCharArray();
+        int stringLength = charArray.length;
+        for (int index = 0; index < charArray.length; index++) {
+            char c = charArray[index];
+            switch (c) {
+                case '+':
+                case '-':
+                   signed = true;
+                   continue;
+                case '#':
+                case 'A':
+                case 'B':
+                case 'C':
+                case 'X':
+                case 'a':
+                case 'b':
+                case 'c':
+                case 'x':
+                    possibleHexadecimal = true;
+                    continue;
+                case 'd':
+                case 'f':
+                case 'D':
+                case 'F':
+                    possibleDecimal = true;
+                    possibleHexadecimal = true;
+                    continue;
+                case 'E':
+                case 'e':
+                    possibleScientificNotation = true;
+                    possibleHexadecimal = true;
+                    exponentIndex = index;
+                    continue;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    continue;
+                case '.':
+                    if (dotIndex >= 0) {
+                        // More than one dot detected means
+                        // the string is not a number
+                        return NumberType.nan;
+                    }
+                    possibleDecimal = true;
+                    dotIndex = index;
+                    continue;
+                default:
+                    // any other character means
+                    // the string is not a number
+                    return NumberType.nan;
+            }
+        }
+
+        if (possibleDecimal) {
+            char trail = charArray[stringLength - 1];
+            if (trail == 'f' || trail == 'F' || trail == 'd' || trail == 'D') {
+                if (dotIndex == stringLength - 2 && dotIndex - 1 < 0) {
+                    return NumberType.nan;
+                }
+                char beforeTrail = charArray[stringLength - 2];
+                if (!Character.isDigit(beforeTrail) && beforeTrail != '.') {
+                    return NumberType.nan;
+                }
+            }
+        }
+
+        if (possibleHexadecimal) {
+            int signOffset = 0;
+            if (signed && (charArray[0] == '+' || charArray[0] == '-')) {
+                signOffset = 1;
+            }
+            if (charArray[signOffset] == '#') {
+                return dotIndex < 0 ? NumberType.hexadecimal : NumberType.nan;
+            }
+            else if (charArray[signOffset] == '0' && (charArray[signOffset + 1] == 'X' || charArray[signOffset + 1] == 'x')) {
+                return dotIndex < 0 ? NumberType.hexadecimal : NumberType.nan;
+            }
+        }
+
+        if (possibleScientificNotation) {
+            char next = charArray[exponentIndex + 1];
+            if (!Character.isDigit(next) && next != '+' && next != '-') {
+                return NumberType.nan;
+            }
+            if (dotIndex == exponentIndex - 1) {
+                if (dotIndex - 1 < 0) {
+                    return NumberType.nan;
+                }
+                char beforeDot = charArray[dotIndex - 1];
+                if (!Character.isDigit(beforeDot)) {
+                    return NumberType.nan;
+                }
+            }
+            for (int index = exponentIndex + 2; index < stringLength; index++) {
+                char character = charArray[index];
+                if (Character.isDigit(character)) {
+                    continue;
+                }
+                if (index == stringLength - 1) {
+                    if (character == 'f' || character == 'F' || character == 'd' || character == 'D') {
+                        return NumberType.scientific;
+                    }
+                }
+                else {
+                    return NumberType.nan;
+                }
+            }
+            return NumberType.scientific;
+        }
+
+        return possibleDecimal ? NumberType.decimal : NumberType.integer;
     }
 
     public String toString(Object object) {
@@ -64,23 +193,26 @@ public class VDFValues {
     }
 
     public Number toNumber(String value) {
-        if (isDecimal(value)) {
-            if (value.endsWith("f") || value.endsWith("F")) {
+        return toNumber(value, getNumberType(value));
+    }
+
+    private Number toNumber(String value, NumberType type) {
+        switch (type) {
+            case integer:
+                return Integer.parseInt(value);
+            case hexadecimal:
+                return Integer.decode(value);
+            case decimal:
+            case scientific:
+                if (value.endsWith("f") || value.endsWith("F")) {
+                    return Float.parseFloat(value);
+                }
+                else if (value.endsWith("d") || value.endsWith("D")) {
+                    return Double.parseDouble(value);
+                }
                 return Float.parseFloat(value);
-            }
-            else if (value.endsWith("d") || value.endsWith("D")) {
-                return Double.parseDouble(value);
-            }
-            return Float.parseFloat(value);
-        }
-        else if (isInteger(value)) {
-            return Integer.parseInt(value);
-        }
-        else if (isHexadecimal(value)) {
-            return Integer.decode(value);
-        }
-        else {
-            throw new VDFValuesException("'" + value + "' is not a number.");
+            default:
+                throw new VDFValuesException("'" + value + "' is not a number.");
         }
     }
 
@@ -221,6 +353,24 @@ public class VDFValues {
         return builder.toString();
     }
 
+    public <T extends Enum<T>> T toEnum(String value, T defaultValue) {
+        try {
+            return toEnum(value, defaultValue.getDeclaringClass());
+        }
+        catch (VDFValuesException e) {
+            return defaultValue;
+        }
+    }
+
+    public <T extends Enum<T>> T toEnum(String value, Class<T> enumClass) {
+        try {
+            return Enum.valueOf(enumClass, value);
+        }
+        catch (Exception e) {
+            throw new VDFValuesException("Couldn't get enum of type " + enumClass.getSimpleName());
+        }
+    }
+
     private boolean isValid(String value, int arrayLengthAllowed) {
         String[] split = value.trim().split(WHITESPACE_REGEX);
         if (split.length != arrayLengthAllowed) {
@@ -245,6 +395,14 @@ public class VDFValues {
             }
         }
         return split;
+    }
+
+    enum NumberType {
+        integer,
+        decimal,
+        hexadecimal,
+        scientific,
+        nan
     }
 
 }

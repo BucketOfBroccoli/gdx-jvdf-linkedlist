@@ -371,6 +371,14 @@ public class VDFNode {
         }
     }
 
+    public <T extends Enum<T>> T asEnum(Class<T> enumClass) {
+        return values.toEnum(asString(), enumClass);
+    }
+
+    public <T extends Enum<T>> T asEnum(T defaultValue) {
+        return values.toEnum(asString(), defaultValue);
+    }
+
     public VDFNode[] asArray(String key) {
         List<VDFNode> list = new ArrayList<>();
         int i = 0;
@@ -538,6 +546,17 @@ public class VDFNode {
         return list.toArray(new Vector2[list.size()]);
     }
 
+    public <T extends Enum<T>> T[] asEnumArray (String key, Class<T> enumClass) {
+        List<T> list = new ArrayList<>();
+        int i = 0;
+        for (VDFNode value = child; value != null; value = value.next, i++) {
+            if (key.equals(value.name)) {
+                list.add(value.asEnum(enumClass));
+            }
+        }
+        return (T[]) list.toArray(new Object[list.size()]);
+    }
+
     /** Returns true if a child with the specified name exists and has a child. */
     public boolean hasChild (String name) {
         return getChild(name) != null;
@@ -621,6 +640,12 @@ public class VDFNode {
     public Vector2 getVector2OfIndex(String name, int namedIndex, Vector2 defaultValue) {
         VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asVector2();
+    }
+
+    /** Finds the child with the specified name & index and returns it as an Enum. Returns defaultValue if not found. */
+    public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, T defaultValue) {
+        VDFNode child = get(name, namedIndex);
+        return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name & index and returns it as a string.
@@ -719,6 +744,14 @@ public class VDFNode {
         return child.asVector2();
     }
 
+    /** Finds the child with the specified name & index and returns it as an Enum.
+     * @throws IllegalArgumentException if the child was not found. */
+    public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, Class<T> enumClass) {
+        VDFNode child = get(name, namedIndex);
+        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
+        return child.asEnum(enumClass);
+    }
+
     /** Finds the child with the specified name and returns it as a string. Returns defaultValue if not found.
      * @param defaultValue May be null. */
     public String getString (String name, String defaultValue) {
@@ -786,10 +819,16 @@ public class VDFNode {
         return (child == null || child.isNull()) ? defaultValue : child.asVector3();
     }
 
-    /** Finds the child with the specified name and returns it as a Vector3. Returns defaultValue if not found. */
+    /** Finds the child with the specified name and returns it as a Vector2. Returns defaultValue if not found. */
     public Vector2 getVector2 (String name, Vector2 defaultValue) {
         VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asVector2();
+    }
+
+    /** Finds the child with the specified name and returns it as an Enum. Returns defaultValue if not found. */
+    public <T extends Enum<T>> T getEnum (String name, T defaultValue) {
+        VDFNode child = get(name);
+        return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name and returns it as a string.
@@ -888,6 +927,14 @@ public class VDFNode {
         return child.asVector2();
     }
 
+    /** Finds the child with the specified name and returns it as an Enum.
+     * @throws IllegalArgumentException if the child was not found. */
+    public <T extends Enum<T>> T getEnum (String name, Class<T> enumClass) {
+        VDFNode child = get(name);
+        if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
+        return child.asEnum(enumClass);
+    }
+
     /** Finds the child with the specified index and returns it as a string.
      * @throws IllegalArgumentException if the child was not found. */
     public String getString (int index) {
@@ -982,6 +1029,14 @@ public class VDFNode {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asVector2();
+    }
+
+    /** Finds the child with the specified index and returns it as an Enum.
+     * @throws IllegalArgumentException if the child was not found. */
+    public <T extends Enum<T>> T getEnum (int index, Class<T> enumClass) {
+        VDFNode child = get(index);
+        if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
+        return child.asEnum(enumClass);
     }
 
     /** Returns the name for this object value.
