@@ -19,6 +19,7 @@ package it.aretesoftware.gdx.jvdf;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -202,12 +203,13 @@ public class VDFNode {
     }
 
     public String asString (String defaultValue) {
-        return value != null ? value : defaultValue;
+        return !isNull() ? value : defaultValue;
     }
 
     /** Returns this value as a float.
      * @throws IllegalStateException if this an array or object. */
     public float asFloat () {
+        checkNullValue("float");
         return Float.parseFloat(value);
     }
 
@@ -215,7 +217,7 @@ public class VDFNode {
         try {
             return asFloat();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -223,6 +225,7 @@ public class VDFNode {
     /** Returns this value as a double.
      * @throws IllegalStateException if this an array or object. */
     public double asDouble () {
+        checkNullValue("double");
         return Double.parseDouble(value);
     }
 
@@ -230,7 +233,7 @@ public class VDFNode {
         try {
             return asDouble();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -238,6 +241,7 @@ public class VDFNode {
     /** Returns this value as a long.
      * @throws IllegalStateException if this an array or object. */
     public long asLong () {
+        checkNullValue("long");
         return Long.parseLong(value);
     }
 
@@ -245,7 +249,7 @@ public class VDFNode {
         try {
             return asLong();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -253,6 +257,7 @@ public class VDFNode {
     /** Returns this value as an int.
      * @throws IllegalStateException if this an array or object. */
     public int asInt () {
+        checkNullValue("int");
         return Integer.parseInt(value);
     }
 
@@ -260,7 +265,7 @@ public class VDFNode {
         try {
             return asInt();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -268,6 +273,7 @@ public class VDFNode {
     /** Returns this value as a boolean.
      * @throws IllegalStateException if this an array or object. */
     public boolean asBoolean () {
+        checkNullValue("boolean");
         return Boolean.parseBoolean(value);
     }
 
@@ -275,7 +281,7 @@ public class VDFNode {
         try {
             return asBoolean();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -283,6 +289,7 @@ public class VDFNode {
     /** Returns this value as a byte.
      * @throws IllegalStateException if this an array or object. */
     public byte asByte () {
+        checkNullValue("byte");
         return Byte.parseByte(value);
     }
 
@@ -290,7 +297,7 @@ public class VDFNode {
         try {
             return asByte();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -298,6 +305,7 @@ public class VDFNode {
     /** Returns this value as a short.
      * @throws IllegalStateException if this an array or object. */
     public short asShort () {
+        checkNullValue("short");
         return Short.parseShort(value);
     }
 
@@ -305,7 +313,7 @@ public class VDFNode {
         try {
             return asShort();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
@@ -314,25 +322,34 @@ public class VDFNode {
         try {
             return asChar();
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
 
-    /** Returns this value as a char.
-     * @throws IllegalStateException if this an array or object. */
     public char asChar () {
         try {
             long value = asLong();
             return (char) value;
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
+            checkNullValue("char");
             if (value.length() > 1) throw new IllegalStateException("String has more than one character.");
             return value.charAt(0);
         }
     }
 
+    public char asChar (char defaultValue) {
+        try {
+            return asChar();
+        }
+        catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
     public Color asColor () {
+        checkNullValue("Color");
         return values.toColor(asString());
     }
 
@@ -340,12 +357,13 @@ public class VDFNode {
         try {
             return asColor();
         }
-        catch (VDFValuesException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
 
     public Vector3 asVector3 () {
+        checkNullValue("Vector3");
         return values.toVector3(asString());
     }
 
@@ -353,12 +371,13 @@ public class VDFNode {
         try {
             return asVector3();
         }
-        catch (VDFValuesException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
 
     public Vector2 asVector2 () {
+        checkNullValue("Vector2");
         return values.toVector2(asString());
     }
 
@@ -366,20 +385,35 @@ public class VDFNode {
         try {
             return asVector2();
         }
-        catch (VDFValuesException e) {
+        catch (Exception e) {
             return defaultValue;
         }
     }
 
     public <T extends Enum<T>> T asEnum(Class<T> enumClass) {
+        checkNullValue(enumClass.getSimpleName());
         return values.toEnum(asString(), enumClass);
     }
 
     public <T extends Enum<T>> T asEnum(T defaultValue) {
-        return values.toEnum(asString(), defaultValue);
+        try {
+            checkNullValue(defaultValue.getDeclaringClass().getSimpleName());
+            return values.toEnum(asString(), defaultValue);
+        }
+        catch (Exception e) {
+            return defaultValue;
+        }
     }
 
-    public VDFNode[] asArray(String key) {
+    /**
+     * @throws IllegalStateException if this node's value is null. */
+    private void checkNullValue(String type) {
+        if (isNull()) {
+            throw new IllegalStateException("Value cannot be converted to " + type);
+        }
+    }
+
+    public List<VDFNode> asArray(String key) {
         List<VDFNode> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -387,12 +421,12 @@ public class VDFNode {
                 list.add(value);
             }
         }
-        return list.toArray(new VDFNode[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated String array.
      * @throws IllegalStateException if this is not an array. */
-    public String[] asStringArray (String key) {
+    public List<String> asStringArray (String key) {
         List<String> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -400,12 +434,12 @@ public class VDFNode {
                 list.add(value.value);
             }
         }
-        return list.toArray(new String[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated float array.
      * @throws IllegalStateException if this is not an array. */
-    public Float[] asFloatArray (String key) {
+    public List<Float> asFloatArray (String key) {
         List<Float> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -413,12 +447,12 @@ public class VDFNode {
                 list.add(value.asFloat());
             }
         }
-        return list.toArray(new Float[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated double array.
      * @throws IllegalStateException if this is not an array. */
-    public Double[] asDoubleArray (String key) {
+    public List<Double> asDoubleArray (String key) {
         List<Double> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -426,12 +460,12 @@ public class VDFNode {
                 list.add(value.asDouble());
             }
         }
-        return list.toArray(new Double[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated long array.
      * @throws IllegalStateException if this is not an array. */
-    public Long[] asLongArray (String key) {
+    public List<Long> asLongArray (String key) {
         List<Long> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -439,12 +473,12 @@ public class VDFNode {
                 list.add(value.asLong());
             }
         }
-        return list.toArray(new Long[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated int array.
      * @throws IllegalStateException if this is not an array. */
-    public Integer[] asIntArray (String key) {
+    public List<Integer> asIntArray (String key) {
         List<Integer> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -452,12 +486,12 @@ public class VDFNode {
                 list.add(value.asInt());
             }
         }
-        return list.toArray(new Integer[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated boolean array.
      * @throws IllegalStateException if this is not an array. */
-    public Boolean[] asBooleanArray (String key) {
+    public List<Boolean> asBooleanArray (String key) {
         List<Boolean> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -465,12 +499,12 @@ public class VDFNode {
                 list.add(value.asBoolean());
             }
         }
-        return list.toArray(new Boolean[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated byte array.
      * @throws IllegalStateException if this is not an array. */
-    public Byte[] asByteArray (String key) {
+    public List<Byte> asByteArray (String key) {
         List<Byte> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -478,12 +512,12 @@ public class VDFNode {
                 list.add(value.asByte());
             }
         }
-        return list.toArray(new Byte[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated short array.
      * @throws IllegalStateException if this is not an array. */
-    public Short[] asShortArray (String key) {
+    public List<Short> asShortArray (String key) {
         List<Short> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -491,12 +525,12 @@ public class VDFNode {
                 list.add(value.asShort());
             }
         }
-        return list.toArray(new Short[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated char array.
      * @throws IllegalStateException if this is not an array. */
-    public Character[] asCharArray (String key) {
+    public List<Character> asCharArray (String key) {
         List<Character> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -504,12 +538,12 @@ public class VDFNode {
                 list.add(value.asChar());
             }
         }
-        return list.toArray(new Character[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated Color array.
      * @throws IllegalStateException if this is not an array. */
-    public Color[] asColorArray (String key) {
+    public List<Color> asColorArray (String key) {
         List<Color> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -517,12 +551,12 @@ public class VDFNode {
                 list.add(value.asColor());
             }
         }
-        return list.toArray(new Color[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated Vector3 array.
      * @throws IllegalStateException if this is not an array. */
-    public Vector3[] asVector3Array (String key) {
+    public List<Vector3> asVector3Array (String key) {
         List<Vector3> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -530,12 +564,12 @@ public class VDFNode {
                 list.add(value.asVector3());
             }
         }
-        return list.toArray(new Vector3[list.size()]);
+        return list;
     }
 
     /** Returns the children of this value as a newly allocated Vector2 array.
      * @throws IllegalStateException if this is not an array. */
-    public Vector2[] asVector2Array (String key) {
+    public List<Vector2> asVector2Array (String key) {
         List<Vector2> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -543,10 +577,10 @@ public class VDFNode {
                 list.add(value.asVector2());
             }
         }
-        return list.toArray(new Vector2[list.size()]);
+        return list;
     }
 
-    public <T extends Enum<T>> T[] asEnumArray (String key, Class<T> enumClass) {
+    public <T extends Enum<T>> List<T> asEnumArray (String key, Class<T> enumClass) {
         List<T> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
@@ -554,7 +588,7 @@ public class VDFNode {
                 list.add(value.asEnum(enumClass));
             }
         }
-        return (T[]) list.toArray(new Object[list.size()]);
+        return list;
     }
 
     /** Returns true if a child with the specified name exists and has a child. */

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * @author Brendan Heinonen
  * modified by AreteS0ftware
@@ -146,10 +148,10 @@ public class TestParser extends BaseTest {
                 .get("key", 1).asString());
 
         // sub_node
-        VDFNode[] nodes = root.get("root_node").asArray("sub_node");
-        Assert.assertEquals(2, nodes.length);
+        List<VDFNode> nodes = root.get("root_node").asArray("sub_node");
+        Assert.assertEquals(2, nodes.size());
         // first
-        VDFNode subNode = nodes[0];
+        VDFNode subNode = nodes.get(0);
         VDFNode node = subNode.get("key");
         Assert.assertEquals("key", node.name());
         Assert.assertEquals("value1", node.asString());
@@ -157,7 +159,7 @@ public class TestParser extends BaseTest {
         Assert.assertEquals("key", node.name());
         Assert.assertEquals("value2", node.asString());
         // second
-        subNode = nodes[1];
+        subNode = nodes.get(1);
         node = subNode.get(0);
         Assert.assertEquals("key", node.name());
         Assert.assertEquals("value3", node.asString());
@@ -170,6 +172,7 @@ public class TestParser extends BaseTest {
     @Test
     public void test() {
         VDFNode node = parser.parse(sample_types).get("root_node");
+        // get by name
         Assert.assertEquals(123456, node.getLong("long"));
         Assert.assertEquals(123456, node.getInt("long"));
         Assert.assertEquals(100, node.getInt("int"));
@@ -188,7 +191,8 @@ public class TestParser extends BaseTest {
         Assert.assertEquals(Color.WHITE, node.getColor("color"));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("vec3"));
         Assert.assertEquals(new Vector2(0, 1), node.getVector2("vec2"));
-
+        Assert.assertEquals(EnumTest.first, node.getEnum("enum", EnumTest.class));
+        // get by index
         Assert.assertEquals("Test!", node.getString(5));
         Assert.assertEquals(123.456f, node.getFloat(3), 0);
         Assert.assertEquals(10e2, node.getDouble(2), 0);
@@ -207,80 +211,101 @@ public class TestParser extends BaseTest {
     public void testArrays() {
         VDFNode root = parser.parse(sample_arrays).get("root_node");
         // VDFNode
-        VDFNode[] vdfValues = root.asArray("vdfValues");
-        Assert.assertEquals(4, vdfValues.length);
-        Assert.assertEquals(0.1f, vdfValues[0].asFloat(), 0f);
-        Assert.assertTrue(vdfValues[1].asBoolean());
-        Assert.assertEquals("Test!", vdfValues[2].asString());
-        Assert.assertEquals(1, vdfValues[3].asLong());
+        List<VDFNode> vdfValues = root.asArray("vdfValues");
+        Assert.assertEquals(4, vdfValues.size());
+        Assert.assertEquals(0.1f, vdfValues.get(0).asFloat(), 0f);
+        Assert.assertTrue(vdfValues.get(1).asBoolean());
+        Assert.assertEquals("Test!", vdfValues.get(2).asString());
+        Assert.assertEquals(1, vdfValues.get(3).asLong());
         // String
-        String[] stringValues = root.asStringArray("vdfValues");
-        Assert.assertEquals(4, stringValues.length);
-        Assert.assertEquals("0.1", stringValues[0]);
-        Assert.assertEquals("true", stringValues[1]);
-        Assert.assertEquals("Test!", stringValues[2]);
-        Assert.assertEquals("1", stringValues[3]);
+        List<String> stringValues = root.asStringArray("vdfValues");
+        Assert.assertEquals(4, stringValues.size());
+        Assert.assertEquals("0.1", stringValues.get(0));
+        Assert.assertEquals("true", stringValues.get(1));
+        Assert.assertEquals("Test!", stringValues.get(2));
+        Assert.assertEquals("1", stringValues.get(3));
         // Double
-        Double[] doubleValues = root.asDoubleArray("doubleValues");
-        Assert.assertEquals(3, doubleValues.length);
-        Assert.assertEquals(1000d, doubleValues[0], 0);
-        Assert.assertEquals(0.1d, doubleValues[1], 0);
-        Assert.assertEquals(-10d, doubleValues[2], 0);
+        List<Double> doubleValues = root.asDoubleArray("doubleValues");
+        Assert.assertEquals(3, doubleValues.size());
+        Assert.assertEquals(1000d, doubleValues.get(0), 0);
+        Assert.assertEquals(0.1d, doubleValues.get(1), 0);
+        Assert.assertEquals(-10d, doubleValues.get(2), 0);
         // Float
-        Float[] floatValues = root.asFloatArray("doubleValues");
-        Assert.assertEquals(3, floatValues.length);
-        Assert.assertEquals(1000f, floatValues[0], 0);
-        Assert.assertEquals(0.1f, floatValues[1], 0.001f);
-        Assert.assertEquals(-10f, floatValues[2], 0);
+        List<Float> floatValues = root.asFloatArray("doubleValues");
+        Assert.assertEquals(3, floatValues.size());
+        Assert.assertEquals(1000f, floatValues.get(0), 0);
+        Assert.assertEquals(0.1f, floatValues.get(1), 0.001f);
+        Assert.assertEquals(-10f, floatValues.get(2), 0);
         // Long
-        Long[] longValues = root.asLongArray("longValues");
-        Assert.assertEquals(3, longValues.length);
-        Assert.assertEquals(1L, longValues[0], 0);
-        Assert.assertEquals(+10L, longValues[1], 0);
-        Assert.assertEquals(-100L, longValues[2], 0);
+        List<Long> longValues = root.asLongArray("longValues");
+        Assert.assertEquals(3, longValues.size());
+        Assert.assertEquals(1L, longValues.get(0), 0);
+        Assert.assertEquals(+10L, longValues.get(1), 0);
+        Assert.assertEquals(-100L, longValues.get(2), 0);
         // Int
-        Integer[] intValues = root.asIntArray("longValues");
-        Assert.assertEquals(3, intValues.length);
-        Assert.assertEquals(1L, intValues[0], 0);
-        Assert.assertEquals(+10L, intValues[1], 0);
-        Assert.assertEquals(-100L, intValues[2], 0);
+        List<Integer> intValues = root.asIntArray("longValues");
+        Assert.assertEquals(3, intValues.size());
+        Assert.assertEquals(1L, intValues.get(0), 0);
+        Assert.assertEquals(+10L, intValues.get(1), 0);
+        Assert.assertEquals(-100L, intValues.get(2), 0);
         // Short
-        Short[] shortValues = root.asShortArray("longValues");
-        Assert.assertEquals(3, shortValues.length);
-        Assert.assertEquals(1, shortValues[0], 0);
-        Assert.assertEquals(+10, shortValues[1], 0);
-        Assert.assertEquals(-100, shortValues[2], 0);
+        List<Short> shortValues = root.asShortArray("longValues");
+        Assert.assertEquals(3, shortValues.size());
+        Assert.assertEquals(1, shortValues.get(0), 0);
+        Assert.assertEquals(+10, shortValues.get(1), 0);
+        Assert.assertEquals(-100, shortValues.get(2), 0);
         // Byte
-        Byte[] byteValues = root.asByteArray("longValues");
-        Assert.assertEquals(3, byteValues.length);
-        Assert.assertEquals(1, byteValues[0], 0);
-        Assert.assertEquals(+10, byteValues[1], 0);
-        Assert.assertEquals(-100, byteValues[2], 0);
+        List<Byte> byteValues = root.asByteArray("longValues");
+        Assert.assertEquals(3, byteValues.size());
+        Assert.assertEquals(1, byteValues.get(0), 0);
+        Assert.assertEquals(+10, byteValues.get(1), 0);
+        Assert.assertEquals(-100, byteValues.get(2), 0);
         // Char
-        Character[] charValues = root.asCharArray("charValues");
-        Assert.assertEquals(3, charValues.length);
-        Assert.assertEquals('a', charValues[0], 0);
-        Assert.assertEquals('b', charValues[1], 0);
-        Assert.assertEquals('c', charValues[2], 0);
+        List<Character> charValues = root.asCharArray("charValues");
+        Assert.assertEquals(3, charValues.size());
+        Assert.assertEquals('a', charValues.get(0), 0);
+        Assert.assertEquals('b', charValues.get(1), 0);
+        Assert.assertEquals('c', charValues.get(2), 0);
         // Long -> Char
         charValues = root.asCharArray("longValues");
-        Assert.assertEquals(3, charValues.length);
-        Assert.assertEquals(1, charValues[0], 0);
-        Assert.assertEquals(10, charValues[1], 0);
-        Assert.assertEquals(65436, charValues[2], 0);
+        Assert.assertEquals(3, charValues.size());
+        Assert.assertEquals(1, charValues.get(0), 0);
+        Assert.assertEquals(10, charValues.get(1), 0);
+        Assert.assertEquals(65436, charValues.get(2), 0);
         // Boolean
-        Boolean[] booleanValues = root.asBooleanArray("booleanValues");
-        Assert.assertTrue(booleanValues[0]);
-        Assert.assertFalse(booleanValues[1]);
+        List<Boolean> booleanValues = root.asBooleanArray("booleanValues");
+        Assert.assertTrue(booleanValues.get(0));
+        Assert.assertFalse(booleanValues.get(1));
         // Boolean -> String
-        String[] booleanToStringValues = root.asStringArray("booleanValues");
-        Assert.assertEquals("true", booleanToStringValues[0]);
-        Assert.assertEquals("false", booleanToStringValues[1]);
+        List<String> booleanToStringValues = root.asStringArray("booleanValues");
+        Assert.assertEquals("true", booleanToStringValues.get(0));
+        Assert.assertEquals("false", booleanToStringValues.get(1));
+        // Color
+        List<Color> colorValues = root.asColorArray("colorValues");
+        Assert.assertEquals(Color.WHITE, colorValues.get(0));
+        Assert.assertEquals(Color.CLEAR, colorValues.get(1));
+        Assert.assertEquals(Color.BLUE, colorValues.get(2));
+        // Vector3
+        List<Vector3> vec3Values = root.asVector3Array("vec3Values");
+        Assert.assertEquals(new Vector3(), vec3Values.get(0));
+        Assert.assertEquals(new Vector3(1, 0, 0), vec3Values.get(1));
+        Assert.assertEquals(new Vector3(1, 1, 1), vec3Values.get(2));
+        // Vector2
+        List<Vector2> vec2Values = root.asVector2Array("vec2Values");
+        Assert.assertEquals(new Vector2(), vec2Values.get(0));
+        Assert.assertEquals(new Vector2(0, 1), vec2Values.get(1));
+        Assert.assertEquals(new Vector2(1, 0), vec2Values.get(2));
+        // Enum
+        List<EnumTest> enumValues = root.asEnumArray("enumValues", EnumTest.class);
+        Assert.assertEquals(EnumTest.fifth, enumValues.get(0));
+        Assert.assertEquals(EnumTest.fourth, enumValues.get(1));
+        Assert.assertEquals(EnumTest.third, enumValues.get(2));
     }
 
     @Test
     public void testDefaultValue() {
-        VDFNode node = new VDFNode("");
+        VDFNode node = new VDFNode();
+        // get by name
         Assert.assertEquals("defaultValue", node.getString("", "defaultValue"));
         Assert.assertEquals(10f, node.getFloat("", 10f), 0);
         Assert.assertEquals(10d, node.getDouble("", 10d), 0);
@@ -290,7 +315,11 @@ public class TestParser extends BaseTest {
         Assert.assertEquals(10, node.getByte("", (byte) 10), 0);
         Assert.assertEquals(10, node.getShort("", (short) 10), 0);
         Assert.assertEquals('a', node.getChar("", 'a'));
-
+        Assert.assertEquals(Color.WHITE, node.getColor("", Color.WHITE));
+        Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("", new Vector3(1, 1, 1)));
+        Assert.assertEquals(new Vector2(1, 1), node.getVector2("", new Vector2(1, 1)));
+        Assert.assertEquals(EnumTest.second, node.getEnum("", EnumTest.second));
+        // get by name & index
         Assert.assertEquals("defaultValue", node.getStringOfIndex("", 1, "defaultValue"));
         Assert.assertEquals(10f, node.getFloatOfIndex("", 1, 10f), 0);
         Assert.assertEquals(10d, node.getDoubleOfIndex("",  1, 10d), 0);
@@ -300,6 +329,24 @@ public class TestParser extends BaseTest {
         Assert.assertEquals(10, node.getByteOfIndex("", 1, (byte) 10), 0);
         Assert.assertEquals(10, node.getShortOfIndex("", 1, (short) 10), 0);
         Assert.assertEquals('a', node.getCharOfIndex("", 1, 'a'));
+        Assert.assertEquals(Color.WHITE, node.getColorOfIndex("", 1, Color.WHITE));
+        Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3OfIndex("", 1, new Vector3(1, 1, 1)));
+        Assert.assertEquals(new Vector2(1, 1), node.getVector2OfIndex("", 1, new Vector2(1, 1)));
+        Assert.assertEquals(EnumTest.second, node.getEnumOfIndex("", 1, EnumTest.second));
+        // as
+        Assert.assertEquals("defaultValue", node.asString("defaultValue"));
+        Assert.assertEquals(10f, node.asFloat(10f), 0);
+        Assert.assertEquals(10d, node.asDouble(10d), 0);
+        Assert.assertEquals(10L, node.asLong(10L), 0);
+        Assert.assertTrue(node.asBoolean(true));
+        Assert.assertEquals(10, node.asByte((byte) 10), 0);
+        Assert.assertEquals(10, node.asShort((short) 10), 0);
+        Assert.assertEquals(97, node.asShort('a'));
+        Assert.assertEquals('a', node.asChar('a'));
+        Assert.assertEquals(Color.WHITE, node.asColor(Color.WHITE));
+        Assert.assertEquals(new Vector3(1, 1, 1), node.asVector3(new Vector3(1, 1, 1)));
+        Assert.assertEquals(new Vector2(1, 1), node.asVector2(new Vector2(1, 1)));
+        Assert.assertEquals(EnumTest.fifth, node.asEnum(EnumTest.fifth));
     }
 
 }
