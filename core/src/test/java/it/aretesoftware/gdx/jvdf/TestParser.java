@@ -347,6 +347,7 @@ public class TestParser extends BaseTest {
         Assert.assertEquals(new Vector3(1, 1, 1), node.asVector3(new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.asVector2(new Vector2(1, 1)));
         Assert.assertEquals(EnumTest.fifth, node.asEnum(EnumTest.fifth));
+
     }
 
 }

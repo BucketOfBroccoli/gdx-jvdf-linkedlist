@@ -109,7 +109,18 @@ public class VDFValues {
             }
         }
 
-        if (possibleDecimal) {
+        // Store whether the String starts with the following:
+        // #
+        // 0X
+        // 0x
+        int signOffset = 0;
+        if (signed && (charArray[0] == '+' || charArray[0] == '-')) {
+            signOffset = 1;
+        }
+        boolean startsWithPound = charArray[signOffset] == '#';
+        boolean startsWithZeroX = charArray[signOffset] == '0' && (charArray[signOffset + 1] == 'X' || charArray[signOffset + 1] == 'x');
+
+        if (!startsWithPound && !startsWithZeroX && possibleDecimal) {
             char trail = charArray[stringLength - 1];
             if (trail == 'f' || trail == 'F' || trail == 'd' || trail == 'D') {
                 if (dotIndex == stringLength - 2 && dotIndex - 1 < 0) {
@@ -123,19 +134,22 @@ public class VDFValues {
         }
 
         if (possibleHexadecimal) {
-            int signOffset = 0;
-            if (signed && (charArray[0] == '+' || charArray[0] == '-')) {
-                signOffset = 1;
-            }
-            if (charArray[signOffset] == '#') {
-                return dotIndex < 0 ? NumberType.hexadecimal : NumberType.nan;
-            }
-            else if (charArray[signOffset] == '0' && (charArray[signOffset + 1] == 'X' || charArray[signOffset + 1] == 'x')) {
+            if (startsWithPound || startsWithZeroX) {
+                int startOffset = startsWithPound ? 1 : 2;
+                for (int index = signOffset + startOffset; index < stringLength; index++) {
+                    char c = charArray[index];
+                    switch (c) {
+                        case '#':
+                        case 'x':
+                        case 'X':
+                            return NumberType.nan;
+                    }
+                }
                 return dotIndex < 0 ? NumberType.hexadecimal : NumberType.nan;
             }
         }
 
-        if (possibleScientificNotation) {
+        if (!startsWithPound && !startsWithZeroX && possibleScientificNotation) {
             char next = charArray[exponentIndex + 1];
             if (!Character.isDigit(next) && next != '+' && next != '-') {
                 return NumberType.nan;

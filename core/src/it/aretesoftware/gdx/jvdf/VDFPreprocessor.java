@@ -22,8 +22,7 @@ import java.util.stream.IntStream;
  * The VDF preprocessor transforms valid, human-readable VDF into minified, less-than-humanly readable VDF that is
  * more easily parsed.  This two-stage process allows for far easier parallelization, as each line can be mapped to a
  * worker thread.
- * @author Brendan Heinonen
- */
+ * @author Brendan Heinonen */
 public class VDFPreprocessor {
 
     /**

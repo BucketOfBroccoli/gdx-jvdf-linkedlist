@@ -18,8 +18,7 @@ package it.aretesoftware.gdx.jvdf;
 
 /**
  * Parses VDF documents into iterable tree structures.
- * @author Brendan Heinonen
- */
+ * @author Brendan Heinonen */
 public class VDFParser {
 
     private final VDFPreprocessor preprocessor;
