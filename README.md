@@ -23,7 +23,7 @@ Then add gdx-quadtree as dependency in your core project:
 project(":core") {
     dependencies {
     	// ...
-        implementation 'com.github.AreteS0ftware:gdx-jvdf-linkedlist:0.0.1'
+        implementation 'com.github.AreteS0ftware:gdx-jvdf-linkedlist:0.1.0'
     }
 }
 ```
