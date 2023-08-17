@@ -13,7 +13,7 @@ import java.util.List;
  * @author Brendan Heinonen
  * modified by AreteS0ftware
  */
-public class GdxTestParser extends GdxBaseTest {
+public class TestGdxVDFParser extends GdxBaseTest {
 
     private final GdxVDFParser parser = new GdxVDFParser();
     private final String sample = getFileContents("resources/sample.txt");

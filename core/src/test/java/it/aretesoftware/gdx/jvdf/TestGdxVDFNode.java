@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * @author AreteS0ftware
  */
-public class GdxTestNode extends GdxBaseTest {
+public class TestGdxVDFNode extends GdxBaseTest {
 
     private final GdxVDFParser parser = new GdxVDFParser();
     private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
@@ -116,7 +116,7 @@ public class GdxTestNode extends GdxBaseTest {
         testIterator(node.get("second_sub_node").iterator("third_sub_node"), "fourth", "");
     }
 
-    private void testIterator(GdxVDFNode.VDFIterator iterator, String firstName, String secondName) {
+    private void testIterator(GdxVDFNode.GdxVDFIterator iterator, String firstName, String secondName) {
         int index = 0;
         while (iterator.hasNext()) {
             GdxVDFNode child = iterator.next();

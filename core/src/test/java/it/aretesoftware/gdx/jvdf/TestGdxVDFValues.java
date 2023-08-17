@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GdxTestValues {
+public class TestGdxVDFValues {
 
     private final GdxVDFValues vdf = new GdxVDFValues();
 

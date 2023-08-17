@@ -3,7 +3,7 @@ package it.aretesoftware.gdx.jvdf;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GdxTestItemSchema extends GdxBaseTest {
+public class TestItemSchema extends GdxBaseTest {
 
     @Test
     public void testItemsGame() {

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class GdxTestWriter extends GdxBaseTest {
+public class TestVDFGdxWriter extends GdxBaseTest {
 
     private final GdxVDFWriter writer = new GdxVDFWriter();
     private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();

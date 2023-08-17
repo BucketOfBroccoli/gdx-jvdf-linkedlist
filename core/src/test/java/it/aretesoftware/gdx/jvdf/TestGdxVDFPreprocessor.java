@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * @author Brendan Heinonen
  */
-public class GdxTestPreprocessor extends GdxBaseTest {
+public class TestGdxVDFPreprocessor extends GdxBaseTest {
 
     private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
 
