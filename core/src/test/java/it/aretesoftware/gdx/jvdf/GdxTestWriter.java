@@ -11,7 +11,7 @@ import java.util.List;
 
 public class GdxTestWriter extends GdxBaseTest {
 
-    private final VDFWriter writer = new VDFWriter();
+    private final GdxVDFWriter writer = new GdxVDFWriter();
     private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
     private final String sample = getFileContents("resources/sample.txt");
     private final String sample_types = getFileContents("resources/sample_types.txt");

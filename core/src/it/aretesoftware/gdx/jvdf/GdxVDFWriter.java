@@ -23,7 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Writes VDF documents into a {@link StringBuilder}.
  * @author Arete */
-public class VDFWriter {
+public class GdxVDFWriter {
 
     private static final GdxVDFValues values = new GdxVDFValues();
 
@@ -36,7 +36,7 @@ public class VDFWriter {
 
     private final StringBuilder builder, whitespace;
 
-    public VDFWriter() {
+    public GdxVDFWriter() {
         this.builder = new StringBuilder();
         this.whitespace = new StringBuilder();
     }
@@ -45,8 +45,8 @@ public class VDFWriter {
     /**
      * Writes the start of a {@link GdxVDFNode}.
      * @param name the name of the newly started {@link GdxVDFNode}
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeNodeStart(String name) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeNodeStart(String name) {
         builder.append(whitespace)
                 .append(QUOTES).append(name).append(QUOTES)
                 .append(NEWLINE)
@@ -57,8 +57,8 @@ public class VDFWriter {
 
     /**
      * Writes the end of the previously started {@link GdxVDFNode}.
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeNodeEnd() {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeNodeEnd() {
         if (whitespace.length() >= 4) {
             whitespace.setLength(whitespace.length() - 4);
         }
@@ -70,8 +70,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a String
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, String value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, String value) {
         builder.append(whitespace)
                 .append(QUOTES).append(key).append(QUOTES)
                 .append(SPACE)
@@ -84,8 +84,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a float
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, float value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, float value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -93,8 +93,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a double
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, double value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, double value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -102,8 +102,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a long
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, long value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, long value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -111,8 +111,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a int
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, int value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, int value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -120,8 +120,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a boolean
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, boolean value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, boolean value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -129,8 +129,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a byte
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, byte value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, byte value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -138,8 +138,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a short
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, short value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, short value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -147,8 +147,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a char
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, char value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, char value) {
         return this.writeValue(key, String.valueOf(value));
     }
 
@@ -156,8 +156,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Color}
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Color value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, Color value) {
         return this.writeValue(key, values.toString(value));
     }
 
@@ -165,8 +165,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Vector3}
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Vector3 value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, Vector3 value) {
         return this.writeValue(key, values.toString(value));
     }
 
@@ -174,8 +174,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Vector2}
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Vector2 value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeValue(String key, Vector2 value) {
         return this.writeValue(key, values.toString(value));
     }
 
@@ -183,8 +183,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as an Enum
-     * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeValue(String key, T value) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public <T extends Enum<T>> GdxVDFWriter writeValue(String key, T value) {
         return this.writeValue(key, value.name());
     }
 
@@ -192,8 +192,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the String array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, String... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, String... values) {
         for (String value : values) {
             writeValue(key, value);
         }
@@ -204,8 +204,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the float array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, float... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, float... values) {
         for (float value : values) {
             writeValue(key, value);
         }
@@ -216,8 +216,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the double array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, double... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, double... values) {
         for (double value : values) {
             writeValue(key, value);
         }
@@ -228,8 +228,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the long array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, long... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, long... values) {
         for (long value : values) {
             writeValue(key, value);
         }
@@ -240,8 +240,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the int array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, int... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, int... values) {
         for (int value : values) {
             writeValue(key, value);
         }
@@ -252,8 +252,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the boolean array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, boolean... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, boolean... values) {
         for (boolean value : values) {
             writeValue(key, value);
         }
@@ -264,8 +264,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the byte array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, byte... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, byte... values) {
         for (byte value : values) {
             writeValue(key, value);
         }
@@ -276,8 +276,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the short array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, short... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, short... values) {
         for (short value : values) {
             writeValue(key, value);
         }
@@ -288,8 +288,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the char array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, char... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, char... values) {
         for (char value : values) {
             writeValue(key, value);
         }
@@ -300,8 +300,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Color} array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Color... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, Color... values) {
         for (Color value : values) {
             writeValue(key, value);
         }
@@ -312,8 +312,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Vector3} array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Vector3... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, Vector3... values) {
         for (Vector3 value : values) {
             writeValue(key, value);
         }
@@ -324,8 +324,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Vector2} array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Vector2... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public GdxVDFWriter writeMultimapValue(String key, Vector2... values) {
         for (Vector2 value : values) {
             writeValue(key, value);
         }
@@ -336,8 +336,8 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the Enum array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeMultimapValue(String key, T... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public <T extends Enum<T>> GdxVDFWriter writeMultimapValue(String key, T... values) {
         for (T value : values) {
             writeValue(key, value);
         }
@@ -348,10 +348,10 @@ public class VDFWriter {
      * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the Enum array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeMultimapValue(String key, Class<T> enumClass, String... values) {
+     * @return this {@link GdxVDFWriter} for chaining */
+    public <T extends Enum<T>> GdxVDFWriter writeMultimapValue(String key, Class<T> enumClass, String... values) {
         for (String value : values) {
-            writeValue(key, VDFWriter.values.toEnum(value, enumClass));
+            writeValue(key, GdxVDFWriter.values.toEnum(value, enumClass));
         }
         return this;
     }
