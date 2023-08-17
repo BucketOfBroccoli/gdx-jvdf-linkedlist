@@ -3,7 +3,7 @@ package it.aretesoftware.gdx.jvdf;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class BaseTest {
+public class GdxBaseTest {
 
     protected String getFileContents(String filePath) {
         filePath = "src/test/" + filePath;

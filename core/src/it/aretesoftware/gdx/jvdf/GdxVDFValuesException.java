@@ -17,10 +17,10 @@ limitations under the License.
 package it.aretesoftware.gdx.jvdf;
 
 /**
- * @author Brendan Heinonen */
-public class VDFParseException extends RuntimeException {
+ * @author Arete */
+public class GdxVDFValuesException extends RuntimeException {
 
-    public VDFParseException(String str) {
+    public GdxVDFValuesException(String str) {
         super(str);
     }
 

@@ -7,12 +7,12 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Various methods for parsing from/to strings/objects and vice versa.
  * @author AreteS0ftware */
-public class VDFValues {
+public class GdxVDFValues {
 
     private final String WHITESPACE_REGEX = "[ \\t\\n]+";
     private final String TRAILLESS_NUMBER_REGEX = "^(\\+|-)?([0-9])*\\.?([0-9]+)?$";
 
-    public VDFValues() {
+    public GdxVDFValues() {
 
     }
 
@@ -226,7 +226,7 @@ public class VDFValues {
                 }
                 return Float.parseFloat(value);
             default:
-                throw new VDFValuesException("'" + value + "' is not a number.");
+                throw new GdxVDFValuesException("'" + value + "' is not a number.");
         }
     }
 
@@ -264,7 +264,7 @@ public class VDFValues {
             return false;
         }
         else {
-            throw new VDFValuesException("'" + value + "' is not a boolean.");
+            throw new GdxVDFValuesException("'" + value + "' is not a boolean.");
         }
     }
 
@@ -371,7 +371,7 @@ public class VDFValues {
         try {
             return toEnum(value, defaultValue.getDeclaringClass());
         }
-        catch (VDFValuesException e) {
+        catch (GdxVDFValuesException e) {
             return defaultValue;
         }
     }
@@ -381,7 +381,7 @@ public class VDFValues {
             return Enum.valueOf(enumClass, value);
         }
         catch (Exception e) {
-            throw new VDFValuesException("Couldn't get enum of type " + enumClass.getSimpleName());
+            throw new GdxVDFValuesException("Couldn't get enum of type " + enumClass.getSimpleName());
         }
     }
 
@@ -398,14 +398,14 @@ public class VDFValues {
         return true;
     }
 
-    private String[] checkConditions(String value, int arrayLengthAllowed, String arrayLengthErrorMessage, String notNumericErrorMessage) throws VDFValuesException {
+    private String[] checkConditions(String value, int arrayLengthAllowed, String arrayLengthErrorMessage, String notNumericErrorMessage) throws GdxVDFValuesException {
         String[] split = value.trim().split(WHITESPACE_REGEX);
         if (split.length != arrayLengthAllowed) {
-            throw new VDFValuesException(arrayLengthErrorMessage);
+            throw new GdxVDFValuesException(arrayLengthErrorMessage);
         }
         for (String number : split) {
             if (!number.matches(TRAILLESS_NUMBER_REGEX)) {
-                throw new VDFValuesException(notNumericErrorMessage);
+                throw new GdxVDFValuesException(notNumericErrorMessage);
             }
         }
         return split;

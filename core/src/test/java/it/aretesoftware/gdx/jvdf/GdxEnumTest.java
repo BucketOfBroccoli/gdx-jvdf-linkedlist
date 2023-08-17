@@ -1,6 +1,6 @@
 package it.aretesoftware.gdx.jvdf;
 
-public enum EnumTest {
+public enum GdxEnumTest {
     first,
     second,
     third,

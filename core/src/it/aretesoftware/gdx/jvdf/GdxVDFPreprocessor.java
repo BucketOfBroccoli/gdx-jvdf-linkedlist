@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
  * more easily parsed.  This two-stage process allows for far easier parallelization, as each line can be mapped to a
  * worker thread.
  * @author Brendan Heinonen */
-public class VDFPreprocessor {
+public class GdxVDFPreprocessor {
 
     /**
      * Preprocesses a VDF document into a minified, less-than-humanly readable, but still valid VDF document with

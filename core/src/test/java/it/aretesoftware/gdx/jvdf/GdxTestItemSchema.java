@@ -3,15 +3,15 @@ package it.aretesoftware.gdx.jvdf;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestItemSchema extends BaseTest {
+public class GdxTestItemSchema extends GdxBaseTest {
 
     @Test
     public void testItemsGame() {
         String contents = getFileContents("resources/items_game.txt");
-        VDFParser parser = new VDFParser();
+        GdxVDFParser parser = new GdxVDFParser();
 
         long start, end;
-        VDFNode root = null;
+        GdxVDFNode root = null;
         for (int counter = 1; counter <= 1; counter++) {
             start = System.nanoTime();
             root = parser.parse(contents);
@@ -19,7 +19,7 @@ public class TestItemSchema extends BaseTest {
             System.out.println(counter + ") Time to parse: " + ((end - start) / 1000000f) + " milliseconds");
         }
 
-        VDFPreprocessor preprocessor = new VDFPreprocessor();
+        GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
         String processed1 = preprocessor.process(contents);
         String processed2 = preprocessor.process(root.toVDF());
         Assert.assertEquals(processed1.length(), processed2.length());

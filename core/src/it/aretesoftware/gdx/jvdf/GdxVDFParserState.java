@@ -22,12 +22,12 @@ import java.util.Stack;
  * Holds the internal state of the VDF parser.
  * @author Brendan Heinonen
  * modified by Arete */
-public class VDFParserState {
+public class GdxVDFParserState {
 
     /**
      * The root node is the base of the VDF document.  All subnodes are children of the root node.
      */
-    private final VDFNode rootNode;
+    private final GdxVDFNode rootNode;
 
     /**
      * Since a VDF document can have a virtually unlimited amount of subnodes, we use a stack datastructure to represent
@@ -35,7 +35,7 @@ public class VDFParserState {
      * top of the stack.  As we leave subnodes, the stack is popped.  The bottom of the stack should always point to
      * the root node.
      */
-    private final Stack<VDFNode> childStack = new Stack<>();
+    private final Stack<GdxVDFNode> childStack = new Stack<>();
 
     /**
      * This flag represents if the parser is currently iterating over a character preceded with an open quote. Since
@@ -73,7 +73,7 @@ public class VDFParserState {
      * Initializes the parser state with a starting root node.
      * @param root an existing root node
      */
-    public VDFParserState(VDFNode root) {
+    public GdxVDFParserState(GdxVDFNode root) {
         this.rootNode = root;
         this.childStack.push(root);
     }
@@ -81,8 +81,8 @@ public class VDFParserState {
     /**
      * Initializes the parser state.
      */
-    public VDFParserState() {
-        this(new VDFNode());
+    public GdxVDFParserState() {
+        this(new GdxVDFNode());
     }
 
 
@@ -90,7 +90,7 @@ public class VDFParserState {
      * Returns the root VDFNode for this parser state.
      * @return the VDFNode representing the root of the VDF document
      */
-    public VDFNode root() {
+    public GdxVDFNode root() {
         return rootNode;
     }
 
@@ -98,7 +98,7 @@ public class VDFParserState {
      * Returns the VDFNode the parser is currently on.
      * @return the VDFNode that the parser is currently writing key/values to
      */
-    public VDFNode current() {
+    public GdxVDFNode current() {
         return childStack.peek();
     }
 
@@ -150,7 +150,7 @@ public class VDFParserState {
                 //System.out.println(keyName);
             } else {
                 // add a child
-                VDFNode node = new VDFNode(currentString.toString());
+                GdxVDFNode node = new GdxVDFNode(currentString.toString());
                 current().addChild(keyName, node);
             }
 
@@ -197,7 +197,7 @@ public class VDFParserState {
             character('{');
         } else {
             // Create new subnode
-            VDFNode node = new VDFNode();
+            GdxVDFNode node = new GdxVDFNode();
 
             // Set the current node's value
             current().addChild(keyName, node);
@@ -221,7 +221,7 @@ public class VDFParserState {
 
             // Popping the root node means there were more ended subnodes than subnodes that existed
             if (rootNode == childStack.pop()) {
-                throw new VDFParseException("The root node was popped. There was a subnode mismatch (misplaced '}'?).");
+                throw new GdxVDFParseException("The root node was popped. There was a subnode mismatch (misplaced '}'?).");
             }
         }
     }
@@ -235,7 +235,7 @@ public class VDFParserState {
         space();
 
         if(childStack.peek() != rootNode) {
-            throw new VDFParseException("The root node was not at the top of the stack at the end of parsing. " +
+            throw new GdxVDFParseException("The root node was not at the top of the stack at the end of parsing. " +
                     "There was a subnode mismatch (misplaced '{'?)");
         }
     }

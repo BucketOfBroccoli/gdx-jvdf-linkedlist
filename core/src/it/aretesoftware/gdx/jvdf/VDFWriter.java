@@ -25,7 +25,7 @@ import com.badlogic.gdx.math.Vector3;
  * @author Arete */
 public class VDFWriter {
 
-    private static final VDFValues values = new VDFValues();
+    private static final GdxVDFValues values = new GdxVDFValues();
 
     private static final String SPACE = " ";
     private static final String WHITESPACE = "    ";
@@ -43,8 +43,8 @@ public class VDFWriter {
 
 
     /**
-     * Writes the start of a {@link VDFNode}.
-     * @param name the name of the newly started {@link VDFNode}
+     * Writes the start of a {@link GdxVDFNode}.
+     * @param name the name of the newly started {@link GdxVDFNode}
      * @return this {@link VDFWriter} for chaining */
     public VDFWriter writeNodeStart(String name) {
         builder.append(whitespace)
@@ -56,7 +56,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes the end of the previously started {@link VDFNode}.
+     * Writes the end of the previously started {@link GdxVDFNode}.
      * @return this {@link VDFWriter} for chaining */
     public VDFWriter writeNodeEnd() {
         if (whitespace.length() >= 4) {
@@ -67,7 +67,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a String
      * @return this {@link VDFWriter} for chaining */
@@ -81,7 +81,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a float
      * @return this {@link VDFWriter} for chaining */
@@ -90,7 +90,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a double
      * @return this {@link VDFWriter} for chaining */
@@ -99,7 +99,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a long
      * @return this {@link VDFWriter} for chaining */
@@ -108,7 +108,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a int
      * @return this {@link VDFWriter} for chaining */
@@ -117,7 +117,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a boolean
      * @return this {@link VDFWriter} for chaining */
@@ -126,7 +126,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a byte
      * @return this {@link VDFWriter} for chaining */
@@ -135,7 +135,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a short
      * @return this {@link VDFWriter} for chaining */
@@ -144,7 +144,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a char
      * @return this {@link VDFWriter} for chaining */
@@ -153,7 +153,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Color}
      * @return this {@link VDFWriter} for chaining */
@@ -162,7 +162,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Vector3}
      * @return this {@link VDFWriter} for chaining */
@@ -171,7 +171,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as a {@link Vector2}
      * @return this {@link VDFWriter} for chaining */
@@ -180,7 +180,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated value
      * @param value the value to write, as an Enum
      * @return this {@link VDFWriter} for chaining */
@@ -189,7 +189,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the String array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -201,7 +201,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the float array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -213,7 +213,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the double array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -225,7 +225,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the long array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -237,7 +237,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the int array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -249,7 +249,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the boolean array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -261,7 +261,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the byte array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -273,7 +273,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the short array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -285,7 +285,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the char array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -297,7 +297,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Color} array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -309,7 +309,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Vector3} array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -321,7 +321,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the {@link Vector2} array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -333,7 +333,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the Enum array of values to write
      * @return this {@link VDFWriter} for chaining */
@@ -345,7 +345,7 @@ public class VDFWriter {
     }
 
     /**
-     * Writes a value in the current {@link VDFNode}.
+     * Writes a value in the current {@link GdxVDFNode}.
      * @param key the name of the associated values
      * @param values the Enum array of values to write
      * @return this {@link VDFWriter} for chaining */
