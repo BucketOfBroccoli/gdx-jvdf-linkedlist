@@ -43,6 +43,10 @@ public class GdxVDFValues {
     }
 
     private NumberType getNumberType(String value) {
+        if (value == null || value.isEmpty()) {
+            return NumberType.nan;
+        }
+
         boolean possibleHexadecimal = false;
         boolean possibleDecimal = false;
         boolean possibleScientificNotation = false;
@@ -118,7 +122,8 @@ public class GdxVDFValues {
             signOffset = 1;
         }
         boolean startsWithPound = charArray[signOffset] == '#';
-        boolean startsWithZeroX = charArray[signOffset] == '0' && (charArray[signOffset + 1] == 'X' || charArray[signOffset + 1] == 'x');
+        boolean startsWithZeroX = charArray[signOffset] == '0' && charArray.length >= 2
+                && (charArray[signOffset + 1] == 'X' || charArray[signOffset + 1] == 'x');
 
         if (!startsWithPound && !startsWithZeroX && possibleDecimal) {
             char trail = charArray[stringLength - 1];
@@ -145,7 +150,9 @@ public class GdxVDFValues {
                             return NumberType.nan;
                     }
                 }
-                return dotIndex < 0 ? NumberType.hexadecimal : NumberType.nan;
+                // if there's no dot and there's more characters than the leading ones, it's a hexadecimal
+                return dotIndex < 0 && (startsWithPound ? charArray.length > 1 : charArray.length > 2)
+                        ? NumberType.hexadecimal : NumberType.nan;
             }
         }
 
@@ -199,6 +206,9 @@ public class GdxVDFValues {
         else if (object instanceof Number) {
             return toString((Number) object);
         }
+        else if (object == null) {
+            return "null";
+        }
         return object.toString();    // Hexadecimal numbers stay as they are
     }
 
@@ -247,6 +257,9 @@ public class GdxVDFValues {
     }
 
     public boolean isBoolean(String value) {
+        if (value == null) {
+            return false;
+        }
         value = value.trim();
         return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
     }
@@ -386,6 +399,9 @@ public class GdxVDFValues {
     }
 
     private boolean isValid(String value, int arrayLengthAllowed) {
+        if (value == null) {
+            return false;
+        }
         String[] split = value.trim().split(WHITESPACE_REGEX);
         if (split.length != arrayLengthAllowed) {
             return false;
@@ -399,6 +415,9 @@ public class GdxVDFValues {
     }
 
     private String[] checkConditions(String value, int arrayLengthAllowed, String arrayLengthErrorMessage, String notNumericErrorMessage) throws GdxVDFValuesException {
+        if (value == null) {
+            throw new GdxVDFValuesException("Value is null.");
+        }
         String[] split = value.trim().split(WHITESPACE_REGEX);
         if (split.length != arrayLengthAllowed) {
             throw new GdxVDFValuesException(arrayLengthErrorMessage);

@@ -29,6 +29,13 @@ public class TestGdxVDFValues {
         Assert.assertEquals(vdf.toObject("#0x8B87"), "#0x8B87");
         Assert.assertEquals(vdf.toObject("1 2 3 4 5"), "1 2 3 4 5");
         Assert.assertEquals(vdf.toObject("String"), "String");
+        // Fixed these in 0.1.1
+        Assert.assertEquals(vdf.toObject("0"), 0);
+        Assert.assertEquals(vdf.toObject("#"), "#");
+        Assert.assertEquals(vdf.toObject("0x"), "0x");
+        Assert.assertEquals(vdf.toObject("0X"), "0X");
+        Assert.assertEquals(vdf.toObject(""), "");
+        Assert.assertNull(vdf.toObject(null));
     }
 
     @Test
@@ -47,6 +54,8 @@ public class TestGdxVDFValues {
         Assert.assertEquals(vdf.toString(obj = "#8B87"), "#8B87");
         Assert.assertEquals(vdf.toString(obj = "#0x8B87"), "#0x8B87");
         Assert.assertEquals(vdf.toString(obj = "String"), "String");
+        // Fixed this in 0.1.1
+        Assert.assertEquals(vdf.toString(obj = null), "null");
     }
 
     @Test
