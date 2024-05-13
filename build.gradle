@@ -46,5 +46,6 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation 'junit:junit:4.13.2'
         testImplementation 'junit:junit:4.13.2'
+        implementation 'com.github.BucketOfBroccoli:utils:2.0.0'
     }
 }

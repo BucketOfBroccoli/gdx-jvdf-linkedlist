@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Brendan Heinonen
- * modified by AreteS0ftware
+ * @author BucketOfBroccoli
  */
 public class TestGdxVDFParser extends GdxBaseTest {
 

@@ -22,10 +22,8 @@ import com.badlogic.gdx.math.Vector3;
 
 /**
  * Writes VDF documents into a {@link StringBuilder}.
- * @author Arete */
+ * @author BucketOfBroccoli */
 public class GdxVDFWriter {
-
-    private static final GdxVDFValues values = new GdxVDFValues();
 
     private static final String SPACE = " ";
     private static final String WHITESPACE = "    ";
@@ -158,7 +156,7 @@ public class GdxVDFWriter {
      * @param value the value to write, as a {@link Color}
      * @return this {@link GdxVDFWriter} for chaining */
     public GdxVDFWriter writeValue(String key, Color value) {
-        return this.writeValue(key, values.toString(value));
+        return this.writeValue(key, GdxVDFUtils.toColorString(value));
     }
 
     /**
@@ -167,7 +165,7 @@ public class GdxVDFWriter {
      * @param value the value to write, as a {@link Vector3}
      * @return this {@link GdxVDFWriter} for chaining */
     public GdxVDFWriter writeValue(String key, Vector3 value) {
-        return this.writeValue(key, values.toString(value));
+        return this.writeValue(key, GdxVDFUtils.toVector3String(value));
     }
 
     /**
@@ -176,7 +174,7 @@ public class GdxVDFWriter {
      * @param value the value to write, as a {@link Vector2}
      * @return this {@link GdxVDFWriter} for chaining */
     public GdxVDFWriter writeValue(String key, Vector2 value) {
-        return this.writeValue(key, values.toString(value));
+        return this.writeValue(key, GdxVDFUtils.toVector2String(value));
     }
 
     /**
@@ -351,7 +349,7 @@ public class GdxVDFWriter {
      * @return this {@link GdxVDFWriter} for chaining */
     public <T extends Enum<T>> GdxVDFWriter writeMultimapValue(String key, Class<T> enumClass, String... values) {
         for (String value : values) {
-            writeValue(key, GdxVDFWriter.values.toEnum(value, enumClass));
+            writeValue(key, GdxVDFUtils.toEnum(value, enumClass));
         }
         return this;
     }

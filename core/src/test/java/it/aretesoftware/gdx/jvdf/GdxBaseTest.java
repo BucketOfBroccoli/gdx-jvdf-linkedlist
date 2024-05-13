@@ -3,6 +3,9 @@ package it.aretesoftware.gdx.jvdf;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+/**
+ * @author BucketOfBroccoli
+ */
 public class GdxBaseTest {
 
     protected String getFileContents(String filePath) {

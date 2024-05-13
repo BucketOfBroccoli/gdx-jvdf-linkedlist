@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * @author BucketOfBroccoli
+ */
 public class TestVDFGdxWriter extends GdxBaseTest {
 
     private final GdxVDFWriter writer = new GdxVDFWriter();

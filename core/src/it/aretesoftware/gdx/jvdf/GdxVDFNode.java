@@ -42,10 +42,9 @@ import java.util.NoSuchElementException;
  * 	System.out.println(entry.name + " = " + entry.asString());
  * </pre>
  *
- * @author Nathan Sweet */
+ * @author Nathan Sweet
+ * @author BucketOfBroccoli */
 public class GdxVDFNode {
-
-    private static final GdxVDFValues values = new GdxVDFValues();
 
     /** May be null. */
     private String value;
@@ -367,7 +366,7 @@ public class GdxVDFNode {
 
     public Color asColor () {
         checkNullValue("Color");
-        return values.toColor(asString());
+        return GdxVDFUtils.toColor(asString());
     }
 
     public Color asColor (Color defaultValue) {
@@ -381,7 +380,7 @@ public class GdxVDFNode {
 
     public Vector3 asVector3 () {
         checkNullValue("Vector3");
-        return values.toVector3(asString());
+        return GdxVDFUtils.toVector3(asString());
     }
 
     public Vector3 asVector3 (Vector3 defaultValue) {
@@ -395,7 +394,7 @@ public class GdxVDFNode {
 
     public Vector2 asVector2 () {
         checkNullValue("Vector2");
-        return values.toVector2(asString());
+        return GdxVDFUtils.toVector2(asString());
     }
 
     public Vector2 asVector2 (Vector2 defaultValue) {
@@ -409,13 +408,13 @@ public class GdxVDFNode {
 
     public <T extends Enum<T>> T asEnum(Class<T> enumClass) {
         checkNullValue(enumClass.getSimpleName());
-        return values.toEnum(asString(), enumClass);
+        return GdxVDFUtils.toEnum(asString(), enumClass);
     }
 
     public <T extends Enum<T>> T asEnum(T defaultValue) {
         try {
             checkNullValue(defaultValue.getDeclaringClass().getSimpleName());
-            return values.toEnum(asString(), defaultValue);
+            return GdxVDFUtils.toEnum(asString(), defaultValue);
         }
         catch (Exception e) {
             return defaultValue;

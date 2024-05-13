@@ -3,6 +3,9 @@ package it.aretesoftware.gdx.jvdf;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * @author BucketOfBroccoli
+ */
 public class TestItemSchema extends GdxBaseTest {
 
     @Test
