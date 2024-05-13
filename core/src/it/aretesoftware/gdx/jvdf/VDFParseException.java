@@ -18,9 +18,9 @@ package it.aretesoftware.gdx.jvdf;
 
 /**
  * @author Brendan Heinonen */
-public class GdxVDFParseException extends RuntimeException {
+public class VDFParseException extends RuntimeException {
 
-    public GdxVDFParseException(String str) {
+    public VDFParseException(String str) {
         super(str);
     }
 

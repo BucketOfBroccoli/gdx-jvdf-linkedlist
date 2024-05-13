@@ -13,9 +13,9 @@ import java.util.List;
  * @author Brendan Heinonen
  * @author BucketOfBroccoli
  */
-public class TestGdxVDFParser extends GdxBaseTest {
+public class TestVDFParser extends BaseTest {
 
-    private final GdxVDFParser parser = new GdxVDFParser();
+    private final VDFParser parser = new VDFParser();
     private final String sample = getFileContents("resources/sample.txt");
     private final String sample_multimap = getFileContents("resources/sample_multimap.txt");
     private final String sample_types = getFileContents("resources/sample_types.txt");
@@ -42,7 +42,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testEscape() {
-        GdxVDFNode node = parser.parse(VDF_ESCAPE_TEST);
+        VDFNode node = parser.parse(VDF_ESCAPE_TEST);
         Assert.assertEquals(VDF_ESCAPE_TEST_RESULT, node.getString("key with \""));
         Assert.assertEquals("val\n\nue", node.getString("newline"));
     }
@@ -51,7 +51,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testNullKeyValue() {
-        GdxVDFNode node = parser.parse(VDF_NULLKV_TEST);
+        VDFNode node = parser.parse(VDF_NULLKV_TEST);
         Assert.assertEquals("", node.getString("key"));
         Assert.assertEquals("value", node.getString(""));
     }
@@ -60,21 +60,21 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testSubsequentKeyValue() {
-        GdxVDFNode node = parser.parse(VDF_SUBSEQUENTKV_TEST);
+        VDFNode node = parser.parse(VDF_SUBSEQUENTKV_TEST);
         Assert.assertEquals("value", node.getString("key"));
     }
 
 
     private static final String VDF_UNDERFLOW_TEST = "root_node { child_node { key value }";
 
-    @Test(expected = GdxVDFParseException.class)
+    @Test(expected = VDFParseException.class)
     public void testUnderflow() {
         parser.parse(VDF_UNDERFLOW_TEST);
     }
 
     private static final String VDF_OVERFLOW_TEST = "root_node { child_node { key value } } }";
 
-    @Test(expected = GdxVDFParseException.class)
+    @Test(expected = VDFParseException.class)
     public void testOverflow() {
         parser.parse(VDF_OVERFLOW_TEST);
     }
@@ -92,9 +92,9 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testSample() {
-        GdxVDFNode root = parser.parse(sample);
+        VDFNode root = parser.parse(sample);
 
-        Assert.assertEquals(GdxVDFNode.class, root.get("root_node").getClass());
+        Assert.assertEquals(VDFNode.class, root.get("root_node").getClass());
         Assert.assertEquals("value1", root
                 .get("root_node")
                 .get("first_sub_node")
@@ -115,8 +115,8 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
         // first_sub_node
         root = root.get("root_node");
-        GdxVDFNode subNode = root.get("first_sub_node");
-        GdxVDFNode node = subNode.get("first");
+        VDFNode subNode = root.get("first_sub_node");
+        VDFNode node = subNode.get("first");
         Assert.assertEquals("first", node.name());
         Assert.assertEquals("value1", node.asString());
         node = subNode.get(1);
@@ -135,7 +135,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testMultimap() {
-        GdxVDFNode root = parser.parse(sample_multimap);
+        VDFNode root = parser.parse(sample_multimap);
 
         Assert.assertEquals(2, root.get("root_node").sizeOf("sub_node"));
         Assert.assertEquals("value1", root
@@ -148,11 +148,11 @@ public class TestGdxVDFParser extends GdxBaseTest {
                 .get("key", 1).asString());
 
         // sub_node
-        List<GdxVDFNode> nodes = root.get("root_node").asArray("sub_node");
+        List<VDFNode> nodes = root.get("root_node").asArray("sub_node");
         Assert.assertEquals(2, nodes.size());
         // first
-        GdxVDFNode subNode = nodes.get(0);
-        GdxVDFNode node = subNode.get("key");
+        VDFNode subNode = nodes.get(0);
+        VDFNode node = subNode.get("key");
         Assert.assertEquals("key", node.name());
         Assert.assertEquals("value1", node.asString());
         node = node.next();
@@ -171,7 +171,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void test() {
-        GdxVDFNode node = parser.parse(sample_types).get("root_node");
+        VDFNode node = parser.parse(sample_types).get("root_node");
         // get by name
         Assert.assertEquals(123456, node.getLong("long"));
         Assert.assertEquals(123456, node.getInt("long"));
@@ -191,7 +191,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
         Assert.assertEquals(Color.WHITE, node.getColor("color"));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("vec3"));
         Assert.assertEquals(new Vector2(0, 1), node.getVector2("vec2"));
-        Assert.assertEquals(GdxEnumTest.first, node.getEnum("enum", GdxEnumTest.class));
+        Assert.assertEquals(ExampleEnum.first, node.getEnum("enum", ExampleEnum.class));
         // get by index
         Assert.assertEquals("Test!", node.getString(5));
         Assert.assertEquals(123.456f, node.getFloat(3), 0);
@@ -209,9 +209,9 @@ public class TestGdxVDFParser extends GdxBaseTest {
 
     @Test
     public void testArrays() {
-        GdxVDFNode root = parser.parse(sample_arrays).get("root_node");
+        VDFNode root = parser.parse(sample_arrays).get("root_node");
         // VDFNode
-        List<GdxVDFNode> vdfValues = root.asArray("vdfValues");
+        List<VDFNode> vdfValues = root.asArray("vdfValues");
         Assert.assertEquals(4, vdfValues.size());
         Assert.assertEquals(0.1f, vdfValues.get(0).asFloat(), 0f);
         Assert.assertTrue(vdfValues.get(1).asBoolean());
@@ -296,15 +296,15 @@ public class TestGdxVDFParser extends GdxBaseTest {
         Assert.assertEquals(new Vector2(0, 1), vec2Values.get(1));
         Assert.assertEquals(new Vector2(1, 0), vec2Values.get(2));
         // Enum
-        List<GdxEnumTest> enumValues = root.asEnumArray("enumValues", GdxEnumTest.class);
-        Assert.assertEquals(GdxEnumTest.fifth, enumValues.get(0));
-        Assert.assertEquals(GdxEnumTest.fourth, enumValues.get(1));
-        Assert.assertEquals(GdxEnumTest.third, enumValues.get(2));
+        List<ExampleEnum> enumValues = root.asEnumArray("enumValues", ExampleEnum.class);
+        Assert.assertEquals(ExampleEnum.fifth, enumValues.get(0));
+        Assert.assertEquals(ExampleEnum.fourth, enumValues.get(1));
+        Assert.assertEquals(ExampleEnum.third, enumValues.get(2));
     }
 
     @Test
     public void testDefaultValue() {
-        GdxVDFNode node = new GdxVDFNode();
+        VDFNode node = new VDFNode();
         // get by name
         Assert.assertEquals("defaultValue", node.getString("", "defaultValue"));
         Assert.assertEquals(10f, node.getFloat("", 10f), 0);
@@ -318,7 +318,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
         Assert.assertEquals(Color.WHITE, node.getColor("", Color.WHITE));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("", new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.getVector2("", new Vector2(1, 1)));
-        Assert.assertEquals(GdxEnumTest.second, node.getEnum("", GdxEnumTest.second));
+        Assert.assertEquals(ExampleEnum.second, node.getEnum("", ExampleEnum.second));
         // get by name & index
         Assert.assertEquals("defaultValue", node.getStringOfIndex("", 1, "defaultValue"));
         Assert.assertEquals(10f, node.getFloatOfIndex("", 1, 10f), 0);
@@ -332,7 +332,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
         Assert.assertEquals(Color.WHITE, node.getColorOfIndex("", 1, Color.WHITE));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3OfIndex("", 1, new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.getVector2OfIndex("", 1, new Vector2(1, 1)));
-        Assert.assertEquals(GdxEnumTest.second, node.getEnumOfIndex("", 1, GdxEnumTest.second));
+        Assert.assertEquals(ExampleEnum.second, node.getEnumOfIndex("", 1, ExampleEnum.second));
         // as
         Assert.assertEquals("defaultValue", node.asString("defaultValue"));
         Assert.assertEquals(10f, node.asFloat(10f), 0);
@@ -346,7 +346,7 @@ public class TestGdxVDFParser extends GdxBaseTest {
         Assert.assertEquals(Color.WHITE, node.asColor(Color.WHITE));
         Assert.assertEquals(new Vector3(1, 1, 1), node.asVector3(new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.asVector2(new Vector2(1, 1)));
-        Assert.assertEquals(GdxEnumTest.fifth, node.asEnum(GdxEnumTest.fifth));
+        Assert.assertEquals(ExampleEnum.fifth, node.asEnum(ExampleEnum.fifth));
 
     }
 

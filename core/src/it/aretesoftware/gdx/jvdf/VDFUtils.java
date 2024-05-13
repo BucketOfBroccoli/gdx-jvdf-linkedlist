@@ -27,12 +27,12 @@ import it.aretesoftware.utils.StringUtils;
 /**
  * Various methods for parsing from/to strings/objects and vice versa.
  * @author BucketOfBroccoli */
-public class GdxVDFUtils {
+public class VDFUtils {
 
     private static final String WHITESPACE_REGEX = "[ \\t\\n]+";
     private static final String TRAILLESS_NUMBER_REGEX = "^(\\+|-)?([0-9])*\\.?([0-9]+)?(f|F)?$";
 
-    private GdxVDFUtils() {
+    private VDFUtils() {
 
     }
 

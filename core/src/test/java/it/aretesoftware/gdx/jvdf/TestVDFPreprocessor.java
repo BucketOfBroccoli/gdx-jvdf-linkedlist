@@ -6,9 +6,9 @@ import org.junit.Test;
 /**
  * @author Brendan Heinonen
  */
-public class TestGdxVDFPreprocessor extends GdxBaseTest {
+public class TestVDFPreprocessor extends BaseTest {
 
-    private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
+    private final VDFPreprocessor preprocessor = new VDFPreprocessor();
 
     private static final String VDF_WHITESPACE_TEST = "      \"Key\"                    \"Value\"       \n";
     private static final String VDF_WHITESPACE_TEST_RESULT = "\"Key\" \"Value\"";

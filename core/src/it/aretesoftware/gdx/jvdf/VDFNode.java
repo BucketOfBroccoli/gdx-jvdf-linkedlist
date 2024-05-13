@@ -44,33 +44,33 @@ import java.util.NoSuchElementException;
  *
  * @author Nathan Sweet
  * @author BucketOfBroccoli */
-public class GdxVDFNode {
+public class VDFNode {
 
     /** May be null. */
     private String value;
 
     public String name;
     /** May be null. */
-    public GdxVDFNode child, parent;
+    public VDFNode child, parent;
     /** May be null. When changing this field the parent {@link #size()} may need to be changed. */
-    public GdxVDFNode next, prev;
+    public VDFNode next, prev;
     public int size;
 
-    public GdxVDFNode() {
+    public VDFNode() {
         this(null);
     }
 
     /** @param value May be null. */
-    public GdxVDFNode(String value) {
+    public VDFNode(String value) {
         this.value = value;
     }
 
 
     /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
-     * {@link GdxVDFNode} for how to iterate efficiently.
+     * {@link VDFNode} for how to iterate efficiently.
      * @return May be null. */
-    public GdxVDFNode get (int index) {
-        GdxVDFNode current = child;
+    public VDFNode get (int index) {
+        VDFNode current = child;
         while (current != null && index > 0) {
             index--;
             current = current.next;
@@ -80,8 +80,8 @@ public class GdxVDFNode {
 
     /** Returns the child with the specified name.
      * @return May be null. */
-    public GdxVDFNode get (String name) {
-        GdxVDFNode current = child;
+    public VDFNode get (String name) {
+        VDFNode current = child;
         while (current != null && (current.name == null || !current.name.equalsIgnoreCase(name)))
             current = current.next;
         return current;
@@ -91,8 +91,8 @@ public class GdxVDFNode {
      * Returns the child with the specified name & index.
      * @return May be null.
      */
-    public GdxVDFNode get (String name, int index) {
-        GdxVDFNode current = child;
+    public VDFNode get (String name, int index) {
+        VDFNode current = child;
         while (current != null && index >= 0) {
             if (name.equalsIgnoreCase(current.name)) {
                 index--;
@@ -111,7 +111,7 @@ public class GdxVDFNode {
 
     /** Returns an iterator for the child with the specified name, or an empty iterator if no child is found. */
     public GdxVDFIterator iterator (String name) {
-        GdxVDFNode current = get(name);
+        VDFNode current = get(name);
         if (current == null) {
             GdxVDFIterator iter = new GdxVDFIterator();
             iter.entry = null;
@@ -121,27 +121,27 @@ public class GdxVDFNode {
     }
 
     /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
-     * {@link GdxVDFNode} for how to iterate efficiently.
+     * {@link VDFNode} for how to iterate efficiently.
      * @throws IllegalArgumentException if the child was not found. */
-    public GdxVDFNode require (int index) {
-        GdxVDFNode current = get(index);
+    public VDFNode require (int index) {
+        VDFNode current = get(index);
         if (current == null) throw new IllegalArgumentException("Child not found with index: " + index);
         return current;
     }
 
     /** Returns the child with the specified name.
      * @throws IllegalArgumentException if the child was not found. */
-    public GdxVDFNode require (String name) {
-        GdxVDFNode current = get(name);
+    public VDFNode require (String name) {
+        VDFNode current = get(name);
         if (current == null) throw new IllegalArgumentException("Child not found with name: " + name);
         return current;
     }
 
     /** Removes the child with the specified index. This requires walking the linked list to the specified entry, see
-     * {@link GdxVDFNode} for how to iterate efficiently.
+     * {@link VDFNode} for how to iterate efficiently.
      * @return May be null. */
-    public GdxVDFNode remove (int index) {
-        GdxVDFNode child = get(index);
+    public VDFNode remove (int index) {
+        VDFNode child = get(index);
         if (child == null) return null;
         if (child.prev == null) {
             this.child = child.next;
@@ -156,8 +156,8 @@ public class GdxVDFNode {
 
     /** Removes the child with the specified name.
      * @return May be null. */
-    public GdxVDFNode remove (String name) {
-        GdxVDFNode child = get(name);
+    public VDFNode remove (String name) {
+        VDFNode child = get(name);
         if (child == null) return null;
         if (child.prev == null) {
             this.child = child.next;
@@ -200,7 +200,7 @@ public class GdxVDFNode {
     }
 
     public int sizeOf(String name) {
-        GdxVDFNode current = child;
+        VDFNode current = child;
         int count = 0;
         while (current != null) {
             if (name.equalsIgnoreCase(current.name)) {
@@ -366,7 +366,7 @@ public class GdxVDFNode {
 
     public Color asColor () {
         checkNullValue("Color");
-        return GdxVDFUtils.toColor(asString());
+        return VDFUtils.toColor(asString());
     }
 
     public Color asColor (Color defaultValue) {
@@ -380,7 +380,7 @@ public class GdxVDFNode {
 
     public Vector3 asVector3 () {
         checkNullValue("Vector3");
-        return GdxVDFUtils.toVector3(asString());
+        return VDFUtils.toVector3(asString());
     }
 
     public Vector3 asVector3 (Vector3 defaultValue) {
@@ -394,7 +394,7 @@ public class GdxVDFNode {
 
     public Vector2 asVector2 () {
         checkNullValue("Vector2");
-        return GdxVDFUtils.toVector2(asString());
+        return VDFUtils.toVector2(asString());
     }
 
     public Vector2 asVector2 (Vector2 defaultValue) {
@@ -408,13 +408,13 @@ public class GdxVDFNode {
 
     public <T extends Enum<T>> T asEnum(Class<T> enumClass) {
         checkNullValue(enumClass.getSimpleName());
-        return GdxVDFUtils.toEnum(asString(), enumClass);
+        return VDFUtils.toEnum(asString(), enumClass);
     }
 
     public <T extends Enum<T>> T asEnum(T defaultValue) {
         try {
             checkNullValue(defaultValue.getDeclaringClass().getSimpleName());
-            return GdxVDFUtils.toEnum(asString(), defaultValue);
+            return VDFUtils.toEnum(asString(), defaultValue);
         }
         catch (Exception e) {
             return defaultValue;
@@ -429,10 +429,10 @@ public class GdxVDFNode {
         }
     }
 
-    public List<GdxVDFNode> asArray(String key) {
-        List<GdxVDFNode> list = new ArrayList<>();
+    public List<VDFNode> asArray(String key) {
+        List<VDFNode> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value);
             }
@@ -445,7 +445,7 @@ public class GdxVDFNode {
     public List<String> asStringArray (String key) {
         List<String> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.value);
             }
@@ -458,7 +458,7 @@ public class GdxVDFNode {
     public List<Float> asFloatArray (String key) {
         List<Float> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asFloat());
             }
@@ -471,7 +471,7 @@ public class GdxVDFNode {
     public List<Double> asDoubleArray (String key) {
         List<Double> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asDouble());
             }
@@ -484,7 +484,7 @@ public class GdxVDFNode {
     public List<Long> asLongArray (String key) {
         List<Long> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asLong());
             }
@@ -497,7 +497,7 @@ public class GdxVDFNode {
     public List<Integer> asIntArray (String key) {
         List<Integer> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asInt());
             }
@@ -510,7 +510,7 @@ public class GdxVDFNode {
     public List<Boolean> asBooleanArray (String key) {
         List<Boolean> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asBoolean());
             }
@@ -523,7 +523,7 @@ public class GdxVDFNode {
     public List<Byte> asByteArray (String key) {
         List<Byte> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asByte());
             }
@@ -536,7 +536,7 @@ public class GdxVDFNode {
     public List<Short> asShortArray (String key) {
         List<Short> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asShort());
             }
@@ -549,7 +549,7 @@ public class GdxVDFNode {
     public List<Character> asCharArray (String key) {
         List<Character> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asChar());
             }
@@ -562,7 +562,7 @@ public class GdxVDFNode {
     public List<Color> asColorArray (String key) {
         List<Color> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asColor());
             }
@@ -575,7 +575,7 @@ public class GdxVDFNode {
     public List<Vector3> asVector3Array (String key) {
         List<Vector3> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asVector3());
             }
@@ -588,7 +588,7 @@ public class GdxVDFNode {
     public List<Vector2> asVector2Array (String key) {
         List<Vector2> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asVector2());
             }
@@ -599,7 +599,7 @@ public class GdxVDFNode {
     public <T extends Enum<T>> List<T> asEnumArray (String key, Class<T> enumClass) {
         List<T> list = new ArrayList<>();
         int i = 0;
-        for (GdxVDFNode value = child; value != null; value = value.next, i++) {
+        for (VDFNode value = child; value != null; value = value.next, i++) {
             if (key.equals(value.name)) {
                 list.add(value.asEnum(enumClass));
             }
@@ -614,94 +614,94 @@ public class GdxVDFNode {
 
     /** Finds the child with the specified name and returns its first child.
      * @return May be null. */
-    public GdxVDFNode getChild (String name) {
-        GdxVDFNode child = get(name);
+    public VDFNode getChild (String name) {
+        VDFNode child = get(name);
         return child == null ? null : child.child;
     }
 
     /** Finds the child with the specified name & index and returns it as a string. Returns defaultValue if not found.
      * @param defaultValue May be null. */
     public String getStringOfIndex(String name, int namedIndex, String defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asString();
     }
 
     /** Finds the child with the specified name & index and returns it as a float. Returns defaultValue if not found. */
     public float getFloatOfIndex(String name, int namedIndex, float defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asFloat();
     }
 
     /** Finds the child with the specified name & index and returns it as a double. Returns defaultValue if not found. */
     public double getDoubleOfIndex(String name, int namedIndex, double defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asDouble();
     }
 
     /** Finds the child with the specified name & index and returns it as a long. Returns defaultValue if not found. */
     public long getLongOfIndex(String name, int namedIndex, long defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asLong();
     }
 
     /** Finds the child with the specified name & index and returns it as an int. Returns defaultValue if not found. */
     public int getIntOfIndex(String name, int namedIndex, int defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asInt();
     }
 
     /** Finds the child with the specified name & index and returns it as a boolean. Returns defaultValue if not found. */
     public boolean getBooleanOfIndex(String name, int namedIndex, boolean defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asBoolean();
     }
 
     /** Finds the child with the specified name & index and returns it as a byte. Returns defaultValue if not found. */
     public byte getByteOfIndex(String name, int namedIndex, byte defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asByte();
     }
 
     /** Finds the child with the specified name & index and returns it as a short. Returns defaultValue if not found. */
     public short getShortOfIndex(String name, int namedIndex, short defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asShort();
     }
 
     /** Finds the child with the specified name & index and returns it as a char. Returns defaultValue if not found. */
     public char getCharOfIndex(String name, int namedIndex, char defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asChar();
     }
 
     /** Finds the child with the specified name & index and returns it as a Color. Returns defaultValue if not found. */
     public Color getColorOfIndex(String name, int namedIndex, Color defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asColor();
     }
 
     /** Finds the child with the specified name & index and returns it as a Vector3. Returns defaultValue if not found. */
     public Vector3 getVector3OfIndex(String name, int namedIndex, Vector3 defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asVector3();
     }
 
     /** Finds the child with the specified name & index and returns it as a Vector2. Returns defaultValue if not found. */
     public Vector2 getVector2OfIndex(String name, int namedIndex, Vector2 defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asVector2();
     }
 
     /** Finds the child with the specified name & index and returns it as an Enum. Returns defaultValue if not found. */
     public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, T defaultValue) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name & index and returns it as a string.
      * @throws IllegalArgumentException if the child was not found. */
     public String getStringOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asString();
     }
@@ -709,7 +709,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a float.
      * @throws IllegalArgumentException if the child was not found. */
     public float getFloatOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asFloat();
     }
@@ -717,7 +717,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a double.
      * @throws IllegalArgumentException if the child was not found. */
     public double getDoubleOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asDouble();
     }
@@ -725,7 +725,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a long.
      * @throws IllegalArgumentException if the child was not found. */
     public long getLongOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asLong();
     }
@@ -733,7 +733,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as an int.
      * @throws IllegalArgumentException if the child was not found. */
     public int getIntOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asInt();
     }
@@ -741,7 +741,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a boolean.
      * @throws IllegalArgumentException if the child was not found. */
     public boolean getBooleanOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asBoolean();
     }
@@ -749,7 +749,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a byte.
      * @throws IllegalArgumentException if the child was not found. */
     public byte getByteOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asByte();
     }
@@ -757,7 +757,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a short.
      * @throws IllegalArgumentException if the child was not found. */
     public short getShortOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asShort();
     }
@@ -765,7 +765,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a char.
      * @throws IllegalArgumentException if the child was not found. */
     public char getCharOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asChar();
     }
@@ -773,7 +773,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a Color.
      * @throws IllegalArgumentException if the child was not found. */
     public Color getColorOfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asColor();
     }
@@ -781,7 +781,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a Vector3.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector3 getVector3OfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asVector3();
     }
@@ -789,7 +789,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as a Vector2.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector2 getVector2OfIndex(String name, int namedIndex) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asVector2();
     }
@@ -797,7 +797,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name & index and returns it as an Enum.
      * @throws IllegalArgumentException if the child was not found. */
     public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, Class<T> enumClass) {
-        GdxVDFNode child = get(name, namedIndex);
+        VDFNode child = get(name, namedIndex);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
         return child.asEnum(enumClass);
     }
@@ -805,86 +805,86 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a string. Returns defaultValue if not found.
      * @param defaultValue May be null. */
     public String getString (String name, String defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asString();
     }
 
     /** Finds the child with the specified name and returns it as a float. Returns defaultValue if not found. */
     public float getFloat (String name, float defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asFloat();
     }
 
     /** Finds the child with the specified name and returns it as a double. Returns defaultValue if not found. */
     public double getDouble (String name, double defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asDouble();
     }
 
     /** Finds the child with the specified name and returns it as a long. Returns defaultValue if not found. */
     public long getLong (String name, long defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asLong();
     }
 
     /** Finds the child with the specified name and returns it as an int. Returns defaultValue if not found. */
     public int getInt (String name, int defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asInt();
     }
 
     /** Finds the child with the specified name and returns it as a boolean. Returns defaultValue if not found. */
     public boolean getBoolean (String name, boolean defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asBoolean();
     }
 
     /** Finds the child with the specified name and returns it as a byte. Returns defaultValue if not found. */
     public byte getByte (String name, byte defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asByte();
     }
 
     /** Finds the child with the specified name and returns it as a short. Returns defaultValue if not found. */
     public short getShort (String name, short defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asShort();
     }
 
     /** Finds the child with the specified name and returns it as a char. Returns defaultValue if not found. */
     public char getChar (String name, char defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asChar();
     }
 
     /** Finds the child with the specified name and returns it as a Color. Returns defaultValue if not found. */
     public Color getColor (String name, Color defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asColor();
     }
 
     /** Finds the child with the specified name and returns it as a Vector3. Returns defaultValue if not found. */
     public Vector3 getVector3 (String name, Vector3 defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asVector3();
     }
 
     /** Finds the child with the specified name and returns it as a Vector2. Returns defaultValue if not found. */
     public Vector2 getVector2 (String name, Vector2 defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asVector2();
     }
 
     /** Finds the child with the specified name and returns it as an Enum. Returns defaultValue if not found. */
     public <T extends Enum<T>> T getEnum (String name, T defaultValue) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name and returns it as a string.
      * @throws IllegalArgumentException if the child was not found. */
     public String getString (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asString();
     }
@@ -892,7 +892,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a float.
      * @throws IllegalArgumentException if the child was not found. */
     public float getFloat (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asFloat();
     }
@@ -900,7 +900,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a double.
      * @throws IllegalArgumentException if the child was not found. */
     public double getDouble (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asDouble();
     }
@@ -908,7 +908,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a long.
      * @throws IllegalArgumentException if the child was not found. */
     public long getLong (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asLong();
     }
@@ -916,7 +916,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as an int.
      * @throws IllegalArgumentException if the child was not found. */
     public int getInt (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asInt();
     }
@@ -924,7 +924,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a boolean.
      * @throws IllegalArgumentException if the child was not found. */
     public boolean getBoolean (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asBoolean();
     }
@@ -932,7 +932,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a byte.
      * @throws IllegalArgumentException if the child was not found. */
     public byte getByte (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asByte();
     }
@@ -940,7 +940,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a short.
      * @throws IllegalArgumentException if the child was not found. */
     public short getShort (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asShort();
     }
@@ -948,7 +948,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a char.
      * @throws IllegalArgumentException if the child was not found. */
     public char getChar (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asChar();
     }
@@ -956,7 +956,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a Color.
      * @throws IllegalArgumentException if the child was not found. */
     public Color getColor (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asColor();
     }
@@ -964,7 +964,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a Vector3.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector3 getVector3 (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asVector3();
     }
@@ -972,7 +972,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as a Vector2.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector2 getVector2 (String name) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asVector2();
     }
@@ -980,7 +980,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified name and returns it as an Enum.
      * @throws IllegalArgumentException if the child was not found. */
     public <T extends Enum<T>> T getEnum (String name, Class<T> enumClass) {
-        GdxVDFNode child = get(name);
+        VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asEnum(enumClass);
     }
@@ -988,7 +988,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a string.
      * @throws IllegalArgumentException if the child was not found. */
     public String getString (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asString();
     }
@@ -996,7 +996,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a float.
      * @throws IllegalArgumentException if the child was not found. */
     public float getFloat (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asFloat();
     }
@@ -1004,7 +1004,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a double.
      * @throws IllegalArgumentException if the child was not found. */
     public double getDouble (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asDouble();
     }
@@ -1012,7 +1012,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a long.
      * @throws IllegalArgumentException if the child was not found. */
     public long getLong (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asLong();
     }
@@ -1020,7 +1020,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as an int.
      * @throws IllegalArgumentException if the child was not found. */
     public int getInt (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asInt();
     }
@@ -1028,7 +1028,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a boolean.
      * @throws IllegalArgumentException if the child was not found. */
     public boolean getBoolean (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asBoolean();
     }
@@ -1036,7 +1036,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a byte.
      * @throws IllegalArgumentException if the child was not found. */
     public byte getByte (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asByte();
     }
@@ -1044,7 +1044,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a short.
      * @throws IllegalArgumentException if the child was not found. */
     public short getShort (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asShort();
     }
@@ -1052,7 +1052,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a char.
      * @throws IllegalArgumentException if the child was not found. */
     public char getChar (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asChar();
     }
@@ -1060,7 +1060,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a Color.
      * @throws IllegalArgumentException if the child was not found. */
     public Color getColor (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asColor();
     }
@@ -1068,7 +1068,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a Color.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector3 getVector3 (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asVector3();
     }
@@ -1076,7 +1076,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as a Color.
      * @throws IllegalArgumentException if the child was not found. */
     public Vector2 getVector2 (int index) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asVector2();
     }
@@ -1084,7 +1084,7 @@ public class GdxVDFNode {
     /** Finds the child with the specified index and returns it as an Enum.
      * @throws IllegalArgumentException if the child was not found. */
     public <T extends Enum<T>> T getEnum (int index, Class<T> enumClass) {
-        GdxVDFNode child = get(index);
+        VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asEnum(enumClass);
     }
@@ -1097,13 +1097,13 @@ public class GdxVDFNode {
 
     /** Returns the parent for this value.
      * @return May be null. */
-    public GdxVDFNode parent () {
+    public VDFNode parent () {
         return parent;
     }
 
     /** Returns the first child for this object or array.
      * @return May be null. */
-    public GdxVDFNode child () {
+    public VDFNode child () {
         return child;
     }
 
@@ -1120,7 +1120,7 @@ public class GdxVDFNode {
     }
 
     /** Sets the name of the specified value and adds it after the last child. */
-    public void addChild (String name, GdxVDFNode value) {
+    public void addChild (String name, VDFNode value) {
         if (name == null) throw new IllegalArgumentException("name cannot be null.");
         value.name = name;
         addChild(value);
@@ -1128,11 +1128,11 @@ public class GdxVDFNode {
 
     /** Adds the specified value after the last child.
      * @throws IllegalStateException if this is an object and the specified child's name is null. */
-    public void addChild (GdxVDFNode value) {
+    public void addChild (VDFNode value) {
         if (value.name == null) throw new IllegalStateException("An object child requires a name: " + value);
         value.parent = this;
         size++;
-        GdxVDFNode current = child;
+        VDFNode current = child;
         if (current == null)
             child = value;
         else {
@@ -1149,13 +1149,13 @@ public class GdxVDFNode {
 
     /** Returns the next sibling of this value.
      * @return May be null. */
-    public GdxVDFNode next () {
+    public VDFNode next () {
         return next;
     }
 
     /** Returns the previous sibling of this value.
      * @return May be null. */
-    public GdxVDFNode prev () {
+    public VDFNode prev () {
         return prev;
     }
 
@@ -1189,8 +1189,8 @@ public class GdxVDFNode {
         return toVDF(this, new StringBuilder(), new StringBuilder());
     }
 
-    private String toVDF(GdxVDFNode root, StringBuilder whitespace, StringBuilder builder) {
-        GdxVDFNode current = root.parent != null ? root : root.child;
+    private String toVDF(VDFNode root, StringBuilder whitespace, StringBuilder builder) {
+        VDFNode current = root.parent != null ? root : root.child;
         while (current != null) {
             builder.append(whitespace);
             builder.append("\"").append(current.name).append("\"");
@@ -1199,7 +1199,7 @@ public class GdxVDFNode {
                 builder.append("\"").append(current.value).append("\"");
             }
             else {
-                GdxVDFNode child = current.child;
+                VDFNode child = current.child;
                 builder.append("\n");
                 builder.append(whitespace);
                 builder.append("{");
@@ -1223,9 +1223,9 @@ public class GdxVDFNode {
     }
 
 
-    public class GdxVDFIterator implements Iterator<GdxVDFNode>, Iterable<GdxVDFNode> {
-        GdxVDFNode entry = child;
-        GdxVDFNode current;
+    public class GdxVDFIterator implements Iterator<VDFNode>, Iterable<VDFNode> {
+        VDFNode entry = child;
+        VDFNode current;
 
         @Override
         public boolean hasNext () {
@@ -1233,7 +1233,7 @@ public class GdxVDFNode {
         }
 
         @Override
-        public GdxVDFNode next () {
+        public VDFNode next () {
             current = entry;
             if (current == null) throw new NoSuchElementException();
             entry = current.next;
@@ -1253,7 +1253,7 @@ public class GdxVDFNode {
         }
 
         @Override
-        public Iterator<GdxVDFNode> iterator () {
+        public Iterator<VDFNode> iterator () {
             return this;
         }
     }

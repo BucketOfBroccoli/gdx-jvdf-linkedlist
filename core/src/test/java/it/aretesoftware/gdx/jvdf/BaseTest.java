@@ -6,7 +6,7 @@ import java.io.FileReader;
 /**
  * @author BucketOfBroccoli
  */
-public class GdxBaseTest {
+public class BaseTest {
 
     protected String getFileContents(String filePath) {
         filePath = "src/test/" + filePath;

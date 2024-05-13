@@ -3,7 +3,7 @@ package it.aretesoftware.gdx.jvdf;
 /**
  * @author BucketOfBroccoli
  */
-public enum GdxEnumTest {
+public enum ExampleEnum {
     first,
     second,
     third,

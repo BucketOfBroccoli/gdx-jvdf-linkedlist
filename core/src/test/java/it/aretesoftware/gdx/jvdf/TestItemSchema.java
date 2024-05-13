@@ -6,15 +6,15 @@ import org.junit.Test;
 /**
  * @author BucketOfBroccoli
  */
-public class TestItemSchema extends GdxBaseTest {
+public class TestItemSchema extends BaseTest {
 
     @Test
     public void testItemsGame() {
         String contents = getFileContents("resources/items_game.txt");
-        GdxVDFParser parser = new GdxVDFParser();
+        VDFParser parser = new VDFParser();
 
         long start, end;
-        GdxVDFNode root = null;
+        VDFNode root = null;
         for (int counter = 1; counter <= 1; counter++) {
             start = System.nanoTime();
             root = parser.parse(contents);
@@ -22,7 +22,7 @@ public class TestItemSchema extends GdxBaseTest {
             System.out.println(counter + ") Time to parse: " + ((end - start) / 1000000f) + " milliseconds");
         }
 
-        GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
+        VDFPreprocessor preprocessor = new VDFPreprocessor();
         String processed1 = preprocessor.process(contents);
         String processed2 = preprocessor.process(root.toVDF());
         Assert.assertEquals(processed1.length(), processed2.length());

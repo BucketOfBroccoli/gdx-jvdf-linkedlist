@@ -19,23 +19,23 @@ package it.aretesoftware.gdx.jvdf;
 /**
  * Parses VDF documents into iterable tree structures.
  * @author Brendan Heinonen */
-public class GdxVDFParser {
+public class VDFParser {
 
-    private final GdxVDFPreprocessor preprocessor;
+    private final VDFPreprocessor preprocessor;
 
     /**
      * Initializes the VDFParser with a specific preprocessor
      * @param preprocessor the preprocessor to process input strings with
      */
-    public GdxVDFParser(GdxVDFPreprocessor preprocessor) {
+    public VDFParser(VDFPreprocessor preprocessor) {
         this.preprocessor = preprocessor;
     }
 
     /**
      * Initializes the VDFParser with the default preprocessor (VDFPreprocessor)
      */
-    public GdxVDFParser() {
-        this(new GdxVDFPreprocessor());
+    public VDFParser() {
+        this(new VDFPreprocessor());
     }
 
     /**
@@ -43,7 +43,7 @@ public class GdxVDFParser {
      * @param vdf the VDF document to parse
      * @return a VDFNode which represents the root of the VDF document
      */
-    public GdxVDFNode parse(String vdf) {
+    public VDFNode parse(String vdf) {
         return parse(vdf.split("\\n"));
     }
 
@@ -52,9 +52,9 @@ public class GdxVDFParser {
      * @param vdf an array of lines representing a VDF document to parse
      * @return a VDFNode which represents the node of the VDF document
      */
-    public GdxVDFNode parse(String[] vdf) {
+    public VDFNode parse(String[] vdf) {
         String processed = preprocessor.process(vdf);
-        GdxVDFParserState state = new GdxVDFParserState();
+        VDFParserState state = new VDFParserState();
 
         char[] arr = processed.toCharArray();
         for(char c : arr) {

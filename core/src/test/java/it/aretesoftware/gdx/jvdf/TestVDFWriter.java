@@ -12,10 +12,10 @@ import java.util.List;
 /**
  * @author BucketOfBroccoli
  */
-public class TestVDFGdxWriter extends GdxBaseTest {
+public class TestVDFWriter extends BaseTest {
 
-    private final GdxVDFWriter writer = new GdxVDFWriter();
-    private final GdxVDFPreprocessor preprocessor = new GdxVDFPreprocessor();
+    private final VDFWriter writer = new VDFWriter();
+    private final VDFPreprocessor preprocessor = new VDFPreprocessor();
     private final String sample = getFileContents("resources/sample.txt");
     private final String sample_types = getFileContents("resources/sample_types.txt");
     private final String sample_arrays = getFileContents("resources/sample_arrays.txt");
@@ -52,11 +52,11 @@ public class TestVDFGdxWriter extends GdxBaseTest {
             writer.writeValue("color", new Color(1, 1, 1, 1));
             writer.writeValue("vec3", new Vector3(1, 1, 1));
             writer.writeValue("vec2", new Vector2(0, 1));
-            writer.writeValue("enum", GdxEnumTest.first);
+            writer.writeValue("enum", ExampleEnum.first);
         writer.writeNodeEnd();
-        GdxVDFParser parser = new GdxVDFParser();
-        GdxVDFNode firstNode = parser.parse(writer.toVDF());
-        GdxVDFNode secondNode = parser.parse(sample_types);
+        VDFParser parser = new VDFParser();
+        VDFNode firstNode = parser.parse(writer.toVDF());
+        VDFNode secondNode = parser.parse(sample_types);
         Assert.assertEquals(firstNode.toVDF(), secondNode.toVDF());
     }
 
@@ -71,11 +71,11 @@ public class TestVDFGdxWriter extends GdxBaseTest {
             writer.writeMultimapValue("colorValues", new Color(1, 1, 1, 1), new Color(0, 0, 0, 0), new Color(0, 0, 1, 1));
             writer.writeMultimapValue("vec3Values", new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
             writer.writeMultimapValue("vec2Values", new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 0));
-            writer.writeMultimapValue("enumValues", GdxEnumTest.fifth, GdxEnumTest.fourth, GdxEnumTest.third);
+            writer.writeMultimapValue("enumValues", ExampleEnum.fifth, ExampleEnum.fourth, ExampleEnum.third);
         writer.writeNodeEnd();
-        GdxVDFParser parser = new GdxVDFParser();
-        GdxVDFNode firstNode = parser.parse(writer.toVDF());
-        GdxVDFNode secondNode = parser.parse(sample_arrays);
+        VDFParser parser = new VDFParser();
+        VDFNode firstNode = parser.parse(writer.toVDF());
+        VDFNode secondNode = parser.parse(sample_arrays);
         Assert.assertEquals(firstNode.toVDF(), secondNode.toVDF());
     }
 
@@ -85,9 +85,9 @@ public class TestVDFGdxWriter extends GdxBaseTest {
         writer.writeMultimapValue("intValues", 1, 10, -100);
         writer.writeMultimapValue("byteValues", (byte)1, (byte)10, (byte)-100);
         writer.writeMultimapValue("shortValues", (short)1, (short)10, (short)-100);
-        writer.writeMultimapValue("enumValues", GdxEnumTest.class, "first", "second", "third");
-        GdxVDFParser parser = new GdxVDFParser();
-        GdxVDFNode node = parser.parse(writer.toVDF());
+        writer.writeMultimapValue("enumValues", ExampleEnum.class, "first", "second", "third");
+        VDFParser parser = new VDFParser();
+        VDFNode node = parser.parse(writer.toVDF());
         // Float
         List<Float> floatValues = node.asFloatArray("floatValues");
         Assert.assertEquals(1f, floatValues.get(0), 0f);
@@ -109,10 +109,10 @@ public class TestVDFGdxWriter extends GdxBaseTest {
         Assert.assertEquals(10, shortValues.get(1), 0f);
         Assert.assertEquals(-100, shortValues.get(2), 0f);
         // Enum
-        List<GdxEnumTest> enumValues = node.asEnumArray("enumValues", GdxEnumTest.class);
-        Assert.assertEquals(GdxEnumTest.first, enumValues.get(0));
-        Assert.assertEquals(GdxEnumTest.second, enumValues.get(1));
-        Assert.assertEquals(GdxEnumTest.third, enumValues.get(2));
+        List<ExampleEnum> enumValues = node.asEnumArray("enumValues", ExampleEnum.class);
+        Assert.assertEquals(ExampleEnum.first, enumValues.get(0));
+        Assert.assertEquals(ExampleEnum.second, enumValues.get(1));
+        Assert.assertEquals(ExampleEnum.third, enumValues.get(2));
     }
 
 }
