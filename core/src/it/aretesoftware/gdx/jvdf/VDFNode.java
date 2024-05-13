@@ -623,79 +623,79 @@ public class VDFNode {
      * @param defaultValue May be null. */
     public String getStringOfIndex(String name, int namedIndex, String defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asString();
+        return (child == null) ? defaultValue : child.asString();
     }
 
     /** Finds the child with the specified name & index and returns it as a float. Returns defaultValue if not found. */
     public float getFloatOfIndex(String name, int namedIndex, float defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asFloat();
+        return (child == null) ? defaultValue : child.asFloat();
     }
 
     /** Finds the child with the specified name & index and returns it as a double. Returns defaultValue if not found. */
     public double getDoubleOfIndex(String name, int namedIndex, double defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asDouble();
+        return (child == null) ? defaultValue : child.asDouble();
     }
 
     /** Finds the child with the specified name & index and returns it as a long. Returns defaultValue if not found. */
     public long getLongOfIndex(String name, int namedIndex, long defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asLong();
+        return (child == null) ? defaultValue : child.asLong();
     }
 
     /** Finds the child with the specified name & index and returns it as an int. Returns defaultValue if not found. */
     public int getIntOfIndex(String name, int namedIndex, int defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asInt();
+        return (child == null) ? defaultValue : child.asInt();
     }
 
     /** Finds the child with the specified name & index and returns it as a boolean. Returns defaultValue if not found. */
     public boolean getBooleanOfIndex(String name, int namedIndex, boolean defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asBoolean();
+        return (child == null) ? defaultValue : child.asBoolean();
     }
 
     /** Finds the child with the specified name & index and returns it as a byte. Returns defaultValue if not found. */
     public byte getByteOfIndex(String name, int namedIndex, byte defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asByte();
+        return (child == null) ? defaultValue : child.asByte();
     }
 
     /** Finds the child with the specified name & index and returns it as a short. Returns defaultValue if not found. */
     public short getShortOfIndex(String name, int namedIndex, short defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asShort();
+        return (child == null) ? defaultValue : child.asShort();
     }
 
     /** Finds the child with the specified name & index and returns it as a char. Returns defaultValue if not found. */
     public char getCharOfIndex(String name, int namedIndex, char defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asChar();
+        return (child == null) ? defaultValue : child.asChar();
     }
 
     /** Finds the child with the specified name & index and returns it as a Color. Returns defaultValue if not found. */
     public Color getColorOfIndex(String name, int namedIndex, Color defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asColor();
+        return (child == null) ? defaultValue : child.asColor();
     }
 
     /** Finds the child with the specified name & index and returns it as a Vector3. Returns defaultValue if not found. */
     public Vector3 getVector3OfIndex(String name, int namedIndex, Vector3 defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asVector3();
+        return (child == null) ? defaultValue : child.asVector3();
     }
 
     /** Finds the child with the specified name & index and returns it as a Vector2. Returns defaultValue if not found. */
     public Vector2 getVector2OfIndex(String name, int namedIndex, Vector2 defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asVector2();
+        return (child == null) ? defaultValue : child.asVector2();
     }
 
     /** Finds the child with the specified name & index and returns it as an Enum. Returns defaultValue if not found. */
     public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, T defaultValue) {
         VDFNode child = get(name, namedIndex);
-        return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
+        return (child == null) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name & index and returns it as a string.
@@ -806,79 +806,79 @@ public class VDFNode {
      * @param defaultValue May be null. */
     public String getString (String name, String defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asString();
+        return (child == null) ? defaultValue : child.asString();
     }
 
     /** Finds the child with the specified name and returns it as a float. Returns defaultValue if not found. */
     public float getFloat (String name, float defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asFloat();
+        return (child == null) ? defaultValue : child.asFloat();
     }
 
     /** Finds the child with the specified name and returns it as a double. Returns defaultValue if not found. */
     public double getDouble (String name, double defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asDouble();
+        return (child == null) ? defaultValue : child.asDouble();
     }
 
     /** Finds the child with the specified name and returns it as a long. Returns defaultValue if not found. */
     public long getLong (String name, long defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asLong();
+        return (child == null) ? defaultValue : child.asLong();
     }
 
     /** Finds the child with the specified name and returns it as an int. Returns defaultValue if not found. */
     public int getInt (String name, int defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asInt();
+        return (child == null) ? defaultValue : child.asInt();
     }
 
     /** Finds the child with the specified name and returns it as a boolean. Returns defaultValue if not found. */
     public boolean getBoolean (String name, boolean defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asBoolean();
+        return (child == null) ? defaultValue : child.asBoolean();
     }
 
     /** Finds the child with the specified name and returns it as a byte. Returns defaultValue if not found. */
     public byte getByte (String name, byte defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asByte();
+        return (child == null) ? defaultValue : child.asByte();
     }
 
     /** Finds the child with the specified name and returns it as a short. Returns defaultValue if not found. */
     public short getShort (String name, short defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asShort();
+        return (child == null) ? defaultValue : child.asShort();
     }
 
     /** Finds the child with the specified name and returns it as a char. Returns defaultValue if not found. */
     public char getChar (String name, char defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asChar();
+        return (child == null) ? defaultValue : child.asChar();
     }
 
     /** Finds the child with the specified name and returns it as a Color. Returns defaultValue if not found. */
     public Color getColor (String name, Color defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asColor();
+        return (child == null) ? defaultValue : child.asColor();
     }
 
     /** Finds the child with the specified name and returns it as a Vector3. Returns defaultValue if not found. */
     public Vector3 getVector3 (String name, Vector3 defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asVector3();
+        return (child == null) ? defaultValue : child.asVector3();
     }
 
     /** Finds the child with the specified name and returns it as a Vector2. Returns defaultValue if not found. */
     public Vector2 getVector2 (String name, Vector2 defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asVector2();
+        return (child == null) ? defaultValue : child.asVector2();
     }
 
     /** Finds the child with the specified name and returns it as an Enum. Returns defaultValue if not found. */
     public <T extends Enum<T>> T getEnum (String name, T defaultValue) {
         VDFNode child = get(name);
-        return (child == null || child.isNull()) ? defaultValue : child.asEnum(defaultValue);
+        return (child == null) ? defaultValue : child.asEnum(defaultValue);
     }
 
     /** Finds the child with the specified name and returns it as a string.
