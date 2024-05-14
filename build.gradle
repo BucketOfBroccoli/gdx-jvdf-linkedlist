@@ -44,7 +44,7 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation 'com.github.BucketOfBroccoli:utils:2.0.0'
+        api 'com.github.BucketOfBroccoli:utils:2.0.0'
         implementation 'junit:junit:4.13.2'
         testImplementation 'junit:junit:4.13.2'
     }
