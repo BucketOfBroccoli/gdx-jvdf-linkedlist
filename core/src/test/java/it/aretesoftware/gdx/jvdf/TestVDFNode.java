@@ -116,7 +116,7 @@ public class TestVDFNode extends BaseTest {
         testIterator(node.get("second_sub_node").iterator("third_sub_node"), "fourth", "");
     }
 
-    private void testIterator(VDFNode.GdxVDFIterator iterator, String firstName, String secondName) {
+    private void testIterator(VDFNode.VDFIterator iterator, String firstName, String secondName) {
         int index = 0;
         while (iterator.hasNext()) {
             VDFNode child = iterator.next();

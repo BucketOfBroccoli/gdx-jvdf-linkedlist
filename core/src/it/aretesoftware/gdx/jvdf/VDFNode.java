@@ -110,10 +110,10 @@ public class VDFNode {
     }
 
     /** Returns an iterator for the child with the specified name, or an empty iterator if no child is found. */
-    public GdxVDFIterator iterator (String name) {
+    public VDFIterator iterator (String name) {
         VDFNode current = get(name);
         if (current == null) {
-            GdxVDFIterator iter = new GdxVDFIterator();
+            VDFIterator iter = new VDFIterator();
             iter.entry = null;
             return iter;
         }
@@ -1164,8 +1164,8 @@ public class VDFNode {
         this.value = value;
     }
 
-    public GdxVDFIterator iterator () {
-        return new GdxVDFIterator();
+    public VDFIterator iterator () {
+        return new VDFIterator();
     }
 
     @Override
@@ -1223,7 +1223,7 @@ public class VDFNode {
     }
 
 
-    public class GdxVDFIterator implements Iterator<VDFNode>, Iterable<VDFNode> {
+    public class VDFIterator implements Iterator<VDFNode>, Iterable<VDFNode> {
         VDFNode entry = child;
         VDFNode current;
 
