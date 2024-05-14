@@ -96,7 +96,7 @@ public class VDFUtils {
             return false;
         }
         else {
-            throw new GdxVDFUtilsException("'" + value + "' is not a boolean.");
+            throw new VDFUtilsException("'" + value + "' is not a boolean.");
         }
     }
 
@@ -211,7 +211,7 @@ public class VDFUtils {
         try {
             return toEnum(value, defaultValue.getDeclaringClass());
         }
-        catch (GdxVDFUtilsException e) {
+        catch (VDFUtilsException e) {
             return defaultValue;
         }
     }
@@ -221,7 +221,7 @@ public class VDFUtils {
             return Enum.valueOf(enumClass, value);
         }
         catch (Exception e) {
-            throw new GdxVDFUtilsException("Couldn't get enum of type " + enumClass.getSimpleName());
+            throw new VDFUtilsException("Couldn't get enum of type " + enumClass.getSimpleName());
         }
     }
 
@@ -241,24 +241,24 @@ public class VDFUtils {
         return true;
     }
 
-    private static String[] checkStringData(String value, int arrayLengthAllowed, String arrayLengthErrorMessage, String notNumericErrorMessage) throws GdxVDFUtilsException {
+    private static String[] checkStringData(String value, int arrayLengthAllowed, String arrayLengthErrorMessage, String notNumericErrorMessage) throws VDFUtilsException {
         if (StringUtils.isNullOrEmpty(value)) {
-            throw new GdxVDFUtilsException("Value is null or empty.");
+            throw new VDFUtilsException("Value is null or empty.");
         }
         String[] split = value.trim().split(WHITESPACE_REGEX);
         if (split.length != arrayLengthAllowed) {
-            throw new GdxVDFUtilsException(arrayLengthErrorMessage);
+            throw new VDFUtilsException(arrayLengthErrorMessage);
         }
         for (String number : split) {
             if (!number.matches(TRAILLESS_NUMBER_REGEX)) {
-                throw new GdxVDFUtilsException(notNumericErrorMessage);
+                throw new VDFUtilsException(notNumericErrorMessage);
             }
         }
         return split;
     }
 
-    static class GdxVDFUtilsException extends GdxRuntimeException {
-        GdxVDFUtilsException(String message) {
+    static class VDFUtilsException extends GdxRuntimeException {
+        VDFUtilsException(String message) {
             super(message);
         }
     }
