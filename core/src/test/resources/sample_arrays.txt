@@ -26,11 +26,4 @@
     "enumValues"      "fifth"
     "enumValues"      "fourth"
     "enumValues"      "third"
-    "objectValues"    "1"
-    "objectValues"    "1.0"
-    "objectValues"    "true"
-    "objectValues"    "1.0 1.0 1.0 1.0"
-    "objectValues"    "1.0 1.0 1.0"
-    "objectValues"    "1.0 1.0"
-    "objectValues"    "Test!"
 }

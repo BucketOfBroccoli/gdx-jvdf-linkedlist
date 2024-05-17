@@ -492,18 +492,6 @@ public class VDFNode {
         }
     }
 
-    /**
-     * @return this node's value as an Object, may be null */
-    public Object asObject () {
-        return VDFUtils.toObject(value);
-    }
-
-    /**
-     * @param defaultValue to return if this node's value is null */
-    public Object asObject (Object defaultValue) {
-        return !isNull() ? asObject() : defaultValue;
-    }
-
     /** Returns the children nodes as a newly allocated {@link Array}.
      * @param name of the children nodes
      * @return {@link Array} filled with said nodes */
@@ -713,20 +701,6 @@ public class VDFNode {
         return list;
     }
 
-    /** Returns the values of children nodes as a newly allocated Object {@link Array}.
-     * @param name of the children nodes
-     * @return Object {@link Array} filled with said nodes' values */
-    public List<Object> asObjectArray (String name) {
-        List<Object> list = new ArrayList<>();
-        int i = 0;
-        for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (name.equals(value.name)) {
-                list.add(value.asObject());
-            }
-        }
-        return list;
-    }
-
     /** @return true if a child with the specified name exists and has a child */
     public boolean hasChild (String name) {
         return getChild(name) != null;
@@ -854,15 +828,6 @@ public class VDFNode {
     public <T extends Enum<T>> T getEnum (String name, T defaultValue) {
         VDFNode child = get(name);
         return (child == null) ? defaultValue : child.asEnum(defaultValue);
-    }
-
-    /** Finds the child node with the specified name and returns its value as an Object.
-     * @param name of the child
-     * @param defaultValue to return if no child is found
-     * @return the child's value as an Object */
-    public Object getObject (String name, Object defaultValue) {
-        VDFNode child = get(name);
-        return child == null ? defaultValue : child.asObject();
     }
 
     /** Finds the child node with the specified name and returns its value as a String.
@@ -996,16 +961,6 @@ public class VDFNode {
         return child.asEnum(enumClass);
     }
 
-    /** Finds the child node with the specified name and returns its value as an Object.
-     * @param name of the child
-     * @return the child's value as an Object
-     * @throws IllegalArgumentException if the child was not found */
-    public Object getObject (String name) {
-        VDFNode child = get(name);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
-        return child.asObject();
-    }
-
     /** Finds the child node with the specified index and returns its value as a String.
      * @param index of the child node
      * @return the child's value as a String
@@ -1135,16 +1090,6 @@ public class VDFNode {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asEnum(enumClass);
-    }
-
-    /** Finds the child node with the specified index and returns its value as an Object.
-     * @param index of the child node
-     * @return the child's value as an Object
-     * @throws IllegalArgumentException if the child was not found */
-    public Object getObject (int index) {
-        VDFNode child = get(index);
-        if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
-        return child.asObject();
     }
 
     /**
