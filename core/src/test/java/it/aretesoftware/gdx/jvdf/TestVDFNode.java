@@ -1,5 +1,7 @@
 package it.aretesoftware.gdx.jvdf;
 
+import com.badlogic.gdx.utils.JsonValue;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,10 +12,10 @@ public class TestVDFNode extends BaseTest {
 
     private final VDFParser parser = new VDFParser();
     private final VDFPreprocessor preprocessor = new VDFPreprocessor();
-    private final String sample = getFileContents("resources/sample.txt");
-    private final String sample_multimap = getFileContents("resources/sample_multimap.txt");
-    private final String sample_types = getFileContents("resources/sample_types.txt");
-    private final String sample_arrays = getFileContents("resources/sample_arrays.txt");
+    private final String sample = getFileContents("sample.txt");
+    private final String sample_multimap = getFileContents("sample_multimap.txt");
+    private final String sample_types = getFileContents("sample_types.txt");
+    private final String sample_arrays = getFileContents("sample_arrays.txt");
 
     @Test
     public void testSize() {
@@ -137,6 +139,12 @@ public class TestVDFNode extends BaseTest {
         testToVDF(sample_arrays);
         testToVDF(sample);
         testToVDF(sample_multimap);
+        // sub node
+        VDFNode node = parser.parse(sample);
+        String result = node.get("root_node").get("first_sub_node").toVDF();
+        if (!result.startsWith("\"first_sub_node\" \n{") || !result.endsWith("}\n")) {
+            Assert.assertEquals("toVDF() not working", "");
+        }
     }
 
     private void testToVDF(String vdfString) {

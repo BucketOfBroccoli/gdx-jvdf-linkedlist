@@ -16,9 +16,9 @@ public class TestVDFWriter extends BaseTest {
 
     private final VDFWriter writer = new VDFWriter();
     private final VDFPreprocessor preprocessor = new VDFPreprocessor();
-    private final String sample = getFileContents("resources/sample.txt");
-    private final String sample_types = getFileContents("resources/sample_types.txt");
-    private final String sample_arrays = getFileContents("resources/sample_arrays.txt");
+    private final String sample = getFileContents("sample.txt");
+    private final String sample_types = getFileContents("sample_types.txt");
+    private final String sample_arrays = getFileContents("sample_arrays.txt");
 
     @Test
     public void testSample() {
@@ -53,6 +53,7 @@ public class TestVDFWriter extends BaseTest {
             writer.writeValue("vec3", new Vector3(1, 1, 1));
             writer.writeValue("vec2", new Vector2(0, 1));
             writer.writeValue("enum", ExampleEnum.first);
+            writer.writeValue("object", Color.WHITE);
         writer.writeNodeEnd();
         VDFParser parser = new VDFParser();
         VDFNode firstNode = parser.parse(writer.toVDF());
@@ -72,6 +73,7 @@ public class TestVDFWriter extends BaseTest {
             writer.writeMultimapValue("vec3Values", new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 1, 1));
             writer.writeMultimapValue("vec2Values", new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 0));
             writer.writeMultimapValue("enumValues", ExampleEnum.fifth, ExampleEnum.fourth, ExampleEnum.third);
+            writer.writeMultimapValue("objectValues", new Object[] {1, 1f, true, Color.WHITE, new Vector3(1f, 1f, 1f), new Vector2(1f, 1f), "Test!"});
         writer.writeNodeEnd();
         VDFParser parser = new VDFParser();
         VDFNode firstNode = parser.parse(writer.toVDF());

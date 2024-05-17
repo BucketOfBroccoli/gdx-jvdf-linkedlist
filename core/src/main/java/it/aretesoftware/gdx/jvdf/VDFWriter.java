@@ -355,6 +355,18 @@ public class VDFWriter {
     }
 
     /**
+     * Writes a value in the current {@link VDFNode}.
+     * @param key the name of the associated values
+     * @param values the Object array of values to write
+     * @return this {@link VDFWriter} for chaining */
+    public VDFWriter writeMultimapValue(String key, Object[] values) {
+        for (Object value : values) {
+            this.writeValue(key, VDFUtils.toString(value));
+        }
+        return this;
+    }
+
+    /**
      * Returns the contents of the {@link StringBuilder}, in a VDF format.
      * @return the VDF document as a String. */
     public String toVDF() {

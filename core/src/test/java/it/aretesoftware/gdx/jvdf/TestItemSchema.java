@@ -10,7 +10,7 @@ public class TestItemSchema extends BaseTest {
 
     @Test
     public void testItemsGame() {
-        String contents = getFileContents("resources/items_game.txt");
+        String contents = getFileContents("items_game.txt");
         VDFParser parser = new VDFParser();
 
         long start, end;

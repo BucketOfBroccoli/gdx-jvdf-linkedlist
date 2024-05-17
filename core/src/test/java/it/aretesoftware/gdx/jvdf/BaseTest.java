@@ -2,6 +2,9 @@ package it.aretesoftware.gdx.jvdf;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * @author BucketOfBroccoli
@@ -9,9 +12,9 @@ import java.io.FileReader;
 public class BaseTest {
 
     protected String getFileContents(String filePath) {
-        filePath = "src/test/" + filePath;
         try {
-            FileReader in = new FileReader(filePath);
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+            Reader in = new InputStreamReader(stream);
             BufferedReader br = new BufferedReader(in);
 
             String line;

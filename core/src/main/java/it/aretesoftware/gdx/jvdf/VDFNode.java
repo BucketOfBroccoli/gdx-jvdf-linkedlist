@@ -19,6 +19,7 @@ package it.aretesoftware.gdx.jvdf;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import java.util.NoSuchElementException;
 
 /** Container for a VDFNode.
  * <p>
- * VDFNode children are a linked list. Iteration of arrays or objects is easily done using an iterator or the {@link #next()}
+ * VDFNode children are a linked list, therefore iteration is easily done using an iterator or the {@link #next()}
  * field, both shown below. This is much more efficient than accessing children by index when there are many children.<br>
  * </p>
  *
@@ -66,9 +67,10 @@ public class VDFNode {
     }
 
 
-    /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
-     * {@link VDFNode} for how to iterate efficiently.
-     * @return May be null. */
+    /** Returns the child at the specified index. This requires walking the linked list to the specified entry,
+     * see {@link VDFNode} for how to iterate efficiently.
+     * @param index of the child to return
+     * @return the child, may be null */
     public VDFNode get (int index) {
         VDFNode current = child;
         while (current != null && index > 0) {
@@ -78,8 +80,10 @@ public class VDFNode {
         return current;
     }
 
-    /** Returns the child with the specified name.
-     * @return May be null. */
+    /**
+     * Returns the child node with the specified name.
+     * @param name of the child
+     * @return the child node, may be null */
     public VDFNode get (String name) {
         VDFNode current = child;
         while (current != null && (current.name == null || !current.name.equalsIgnoreCase(name)))
@@ -87,10 +91,10 @@ public class VDFNode {
         return current;
     }
 
-    /**
-     * Returns the child with the specified name & index.
-     * @return May be null.
-     */
+    /** Returns the child node with the specified name and index.
+     * @param name of the child
+     * @param index of the child
+     * @return the child node, may be null */
     public VDFNode get (String name, int index) {
         VDFNode current = child;
         while (current != null && index >= 0) {
@@ -104,12 +108,12 @@ public class VDFNode {
         return current;
     }
 
-    /** Returns true if a child with the specified name exists. */
+    /** @return true if a child node with the specified name exists */
     public boolean has (String name) {
         return get(name) != null;
     }
 
-    /** Returns an iterator for the child with the specified name, or an empty iterator if no child is found. */
+    /** Returns an iterator for the child node with the specified name, or an empty iterator if no child is found. */
     public VDFIterator iterator (String name) {
         VDFNode current = get(name);
         if (current == null) {
@@ -120,17 +124,18 @@ public class VDFNode {
         return current.iterator();
     }
 
-    /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
+    /** Returns the child node at the specified index. This requires walking the linked list to the specified entry, see
      * {@link VDFNode} for how to iterate efficiently.
-     * @throws IllegalArgumentException if the child was not found. */
+     * @throws IllegalArgumentException if the child was not found */
     public VDFNode require (int index) {
         VDFNode current = get(index);
         if (current == null) throw new IllegalArgumentException("Child not found with index: " + index);
         return current;
     }
 
-    /** Returns the child with the specified name.
-     * @throws IllegalArgumentException if the child was not found. */
+    /**
+     * @return the child node with the specified name
+     * @throws IllegalArgumentException if the child was not found */
     public VDFNode require (String name) {
         VDFNode current = get(name);
         if (current == null) throw new IllegalArgumentException("Child not found with name: " + name);
@@ -139,7 +144,7 @@ public class VDFNode {
 
     /** Removes the child with the specified index. This requires walking the linked list to the specified entry, see
      * {@link VDFNode} for how to iterate efficiently.
-     * @return May be null. */
+     * @return the removed child, may be null */
     public VDFNode remove (int index) {
         VDFNode child = get(index);
         if (child == null) return null;
@@ -154,8 +159,8 @@ public class VDFNode {
         return child;
     }
 
-    /** Removes the child with the specified name.
-     * @return May be null. */
+    /** Removes the child node with the specified name.
+     * @return the removed child, may be null */
     public VDFNode remove (String name) {
         VDFNode child = get(name);
         if (child == null) return null;
@@ -170,7 +175,8 @@ public class VDFNode {
         return child;
     }
 
-    /** Removes this value from its parent. */
+    /** Removes this node from its parent.
+     * @throws IllegalStateException if parent is null */
     public void remove () {
         if (parent == null) throw new IllegalStateException();
         if (prev == null) {
@@ -183,17 +189,18 @@ public class VDFNode {
         parent.size--;
     }
 
-    /** Returns true if there are one or more children in the array or object. */
+    /** @return true if this node has one or more children */
     public boolean notEmpty () {
         return size > 0;
     }
 
-    /** Returns true if there are not children in the array or object. */
+    /** @return true if this node has no children */
     public boolean isEmpty () {
         return size == 0;
     }
 
-    /** @deprecated Use {@link #size} instead. Returns this number of children in the array or object. */
+    /** @deprecated Use {@link #size} instead
+     * @return the number of children of this node.*/
     @Deprecated
     public int size () {
         return size;
@@ -211,24 +218,28 @@ public class VDFNode {
         return count;
     }
 
-    /** Returns this value as a string.
-     * @return May be null if this value is null.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a String, may be null. */
     public String asString () {
         return value;
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public String asString (String defaultValue) {
         return !isNull() ? value : defaultValue;
     }
 
-    /** Returns this value as a float.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a float.
+     * @throws IllegalStateException if value is null. */
     public float asFloat () {
-        checkNullValue("float");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Float.parseFloat(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public float asFloat(float defaultValue) {
         try {
             return asFloat();
@@ -238,13 +249,17 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as a double.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a double.
+     * @throws IllegalStateException if value is null. */
     public double asDouble () {
-        checkNullValue("double");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Double.parseDouble(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public double asDouble(double defaultValue) {
         try {
             return asDouble();
@@ -254,13 +269,17 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as a long.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a long.
+     * @throws IllegalStateException if value is null. */
     public long asLong () {
-        checkNullValue("long");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Long.parseLong(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public long asLong(long defaultValue) {
         try {
             return asLong();
@@ -270,14 +289,18 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as an int.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as an int
+     * @throws IllegalStateException if value is null */
     public int asInt () {
-        checkNullValue("int");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Integer.parseInt(value);
     }
 
-    public long asInt(int defaultValue) {
+    /**
+     * @param defaultValue to return if this node's value is null */
+    public int asInt(int defaultValue) {
         try {
             return asInt();
         }
@@ -286,13 +309,17 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as a boolean.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a boolean
+     * @throws IllegalStateException if value is null */
     public boolean asBoolean () {
-        checkNullValue("boolean");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Boolean.parseBoolean(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public boolean asBoolean(boolean defaultValue) {
         try {
             return asBoolean();
@@ -302,13 +329,17 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as a byte.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a byte
+     * @throws IllegalStateException if value is null */
     public byte asByte () {
-        checkNullValue("byte");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Byte.parseByte(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public byte asByte(byte defaultValue) {
         try {
             return asByte();
@@ -318,13 +349,17 @@ public class VDFNode {
         }
     }
 
-    /** Returns this value as a short.
-     * @throws IllegalStateException if this an array or object. */
+    /** @return this node's value as a short
+     * @throws IllegalStateException if value is null */
     public short asShort () {
-        checkNullValue("short");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return Short.parseShort(value);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public short asShort(short defaultValue) {
         try {
             return asShort();
@@ -334,6 +369,8 @@ public class VDFNode {
         }
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public char asShort(char defaultValue) {
         try {
             return asChar();
@@ -343,18 +380,25 @@ public class VDFNode {
         }
     }
 
+    /** @return this node's value as a char
+     * @throws IllegalStateException if value is null
+     * @throws IllegalStateException if string has more than one character */
     public char asChar () {
         try {
             long value = asLong();
             return (char) value;
         }
         catch (Exception e) {
-            checkNullValue("char");
+            if (isNull()) {
+                throw new IllegalStateException("Value is null.");
+            }
             if (value.length() > 1) throw new IllegalStateException("String has more than one character.");
             return value.charAt(0);
         }
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public char asChar (char defaultValue) {
         try {
             return asChar();
@@ -364,11 +408,17 @@ public class VDFNode {
         }
     }
 
+    /** @return this node's value as a {@link Color}
+     * @throws IllegalStateException if value is null */
     public Color asColor () {
-        checkNullValue("Color");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return VDFUtils.toColor(asString());
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public Color asColor (Color defaultValue) {
         try {
             return asColor();
@@ -378,11 +428,17 @@ public class VDFNode {
         }
     }
 
+    /** @return this node's value as a {@link Vector3}
+     * @throws IllegalStateException if value is null */
     public Vector3 asVector3 () {
-        checkNullValue("Vector3");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return VDFUtils.toVector3(asString());
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public Vector3 asVector3 (Vector3 defaultValue) {
         try {
             return asVector3();
@@ -392,11 +448,17 @@ public class VDFNode {
         }
     }
 
+    /** @return this node's value as a {@link Vector2}
+     * @throws IllegalStateException if value is null */
     public Vector2 asVector2 () {
-        checkNullValue("Vector2");
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return VDFUtils.toVector2(asString());
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public Vector2 asVector2 (Vector2 defaultValue) {
         try {
             return asVector2();
@@ -406,14 +468,23 @@ public class VDFNode {
         }
     }
 
+    /**
+     * @return this node's value as an Enum
+     * @throws IllegalStateException if value is null */
     public <T extends Enum<T>> T asEnum(Class<T> enumClass) {
-        checkNullValue(enumClass.getSimpleName());
+        if (isNull()) {
+            throw new IllegalStateException("Value is null.");
+        }
         return VDFUtils.toEnum(asString(), enumClass);
     }
 
+    /**
+     * @param defaultValue to return if this node's value is null */
     public <T extends Enum<T>> T asEnum(T defaultValue) {
         try {
-            checkNullValue(defaultValue.getDeclaringClass().getSimpleName());
+            if (isNull()) {
+                throw new IllegalStateException("Value is null.");
+            }
             return VDFUtils.toEnum(asString(), defaultValue);
         }
         catch (Exception e) {
@@ -422,466 +493,381 @@ public class VDFNode {
     }
 
     /**
-     * @throws IllegalStateException if this node's value is null. */
-    private void checkNullValue(String type) {
-        if (isNull()) {
-            throw new IllegalStateException("Value cannot be converted to " + type);
-        }
+     * @return this node's value as an Object, may be null */
+    public Object asObject () {
+        return VDFUtils.toObject(value);
     }
 
-    public List<VDFNode> asArray(String key) {
-        List<VDFNode> list = new ArrayList<>();
+    /**
+     * @param defaultValue to return if this node's value is null */
+    public Object asObject (Object defaultValue) {
+        return !isNull() ? asObject() : defaultValue;
+    }
+
+    /** Returns the children nodes as a newly allocated {@link Array}.
+     * @param name of the children nodes
+     * @return {@link Array} filled with said nodes */
+    public Array<VDFNode> asArray(String name) {
+        Array<VDFNode> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value);
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated String array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<String> asStringArray (String key) {
+    /** Returns the values of children nodes as a newly allocated String {@link Array}.
+     * @param name of the children nodes
+     * @return String {@link Array} filled with said nodes' values */
+    public List<String> asStringArray (String name) {
         List<String> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.value);
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated float array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Float> asFloatArray (String key) {
+    /** Returns the values of children nodes as a newly allocated float {@link Array}.
+     * @param name of the children nodes
+     * @return float {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Float> asFloatArray (String name) {
         List<Float> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asFloat());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated double array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Double> asDoubleArray (String key) {
+    /** Returns the values of children nodes as a newly allocated double {@link Array}.
+     * @param name of the children nodes
+     * @return double {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Double> asDoubleArray (String name) {
         List<Double> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asDouble());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated long array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Long> asLongArray (String key) {
+    /** Returns the values of children nodes as a newly allocated long {@link Array}.
+     * @param name of the children nodes
+     * @return long {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Long> asLongArray (String name) {
         List<Long> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asLong());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated int array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Integer> asIntArray (String key) {
+    /** Returns the values of children nodes as a newly allocated int {@link Array}.
+     * @param name of the children nodes
+     * @return int {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Integer> asIntArray (String name) {
         List<Integer> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asInt());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated boolean array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Boolean> asBooleanArray (String key) {
+    /** Returns the values of children nodes as a newly allocated boolean {@link Array}.
+     * @param name of the children nodes
+     * @return boolean {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Boolean> asBooleanArray (String name) {
         List<Boolean> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asBoolean());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated byte array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Byte> asByteArray (String key) {
+    /** Returns the values of children nodes as a newly allocated byte {@link Array}.
+     * @param name of the children nodes
+     * @return byte {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Byte> asByteArray (String name) {
         List<Byte> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asByte());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated short array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Short> asShortArray (String key) {
+    /** Returns the values of children nodes as a newly allocated short {@link Array}.
+     * @param name of the children nodes
+     * @return short {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Short> asShortArray (String name) {
         List<Short> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asShort());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated char array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Character> asCharArray (String key) {
+    /** Returns the values of children nodes as a newly allocated char {@link Array}.
+     * @param name of the children nodes
+     * @return char {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Character> asCharArray (String name) {
         List<Character> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asChar());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated Color array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Color> asColorArray (String key) {
+    /** Returns the values of children nodes as a newly allocated {@link Color} {@link Array}.
+     * @param name of the children nodes
+     * @return {@link Color} {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Color> asColorArray (String name) {
         List<Color> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asColor());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated Vector3 array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Vector3> asVector3Array (String key) {
+    /** Returns the values of children nodes as a newly allocated {@link Vector3} {@link Array}.
+     * @param name of the children nodes
+     * @return {@link Vector3} {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Vector3> asVector3Array (String name) {
         List<Vector3> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asVector3());
             }
         }
         return list;
     }
 
-    /** Returns the children of this value as a newly allocated Vector2 array.
-     * @throws IllegalStateException if this is not an array. */
-    public List<Vector2> asVector2Array (String key) {
+    /** Returns the values of children nodes as a newly allocated {@link Vector2} {@link Array}.
+     * @param name of the children nodes
+     * @return {@link Vector2} {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public List<Vector2> asVector2Array (String name) {
         List<Vector2> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asVector2());
             }
         }
         return list;
     }
 
-    public <T extends Enum<T>> List<T> asEnumArray (String key, Class<T> enumClass) {
+    /** Returns the values of children nodes as a newly allocated Enum {@link Array}.
+     * @param name of the children nodes
+     * @param enumClass of the Enum the values represent
+     * @return Enum {@link Array} filled with said nodes' values
+     * @throws IllegalStateException if any of the values are null */
+    public <T extends Enum<T>> List<T> asEnumArray (String name, Class<T> enumClass) {
         List<T> list = new ArrayList<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
-            if (key.equals(value.name)) {
+            if (name.equals(value.name)) {
                 list.add(value.asEnum(enumClass));
             }
         }
         return list;
     }
 
-    /** Returns true if a child with the specified name exists and has a child. */
+    /** Returns the values of children nodes as a newly allocated Object {@link Array}.
+     * @param name of the children nodes
+     * @return Object {@link Array} filled with said nodes' values */
+    public List<Object> asObjectArray (String name) {
+        List<Object> list = new ArrayList<>();
+        int i = 0;
+        for (VDFNode value = child; value != null; value = value.next, i++) {
+            if (name.equals(value.name)) {
+                list.add(value.asObject());
+            }
+        }
+        return list;
+    }
+
+    /** @return true if a child with the specified name exists and has a child */
     public boolean hasChild (String name) {
         return getChild(name) != null;
     }
 
-    /** Finds the child with the specified name and returns its first child.
-     * @return May be null. */
+    /** Finds the child node with the specified name and returns its first child.
+     * @return the node, may be null */
     public VDFNode getChild (String name) {
         VDFNode child = get(name);
         return child == null ? null : child.child;
     }
 
-    /** Finds the child with the specified name & index and returns it as a string. Returns defaultValue if not found.
-     * @param defaultValue May be null. */
-    public String getStringOfIndex(String name, int namedIndex, String defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asString();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a float. Returns defaultValue if not found. */
-    public float getFloatOfIndex(String name, int namedIndex, float defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asFloat();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a double. Returns defaultValue if not found. */
-    public double getDoubleOfIndex(String name, int namedIndex, double defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asDouble();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a long. Returns defaultValue if not found. */
-    public long getLongOfIndex(String name, int namedIndex, long defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asLong();
-    }
-
-    /** Finds the child with the specified name & index and returns it as an int. Returns defaultValue if not found. */
-    public int getIntOfIndex(String name, int namedIndex, int defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asInt();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a boolean. Returns defaultValue if not found. */
-    public boolean getBooleanOfIndex(String name, int namedIndex, boolean defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asBoolean();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a byte. Returns defaultValue if not found. */
-    public byte getByteOfIndex(String name, int namedIndex, byte defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asByte();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a short. Returns defaultValue if not found. */
-    public short getShortOfIndex(String name, int namedIndex, short defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asShort();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a char. Returns defaultValue if not found. */
-    public char getCharOfIndex(String name, int namedIndex, char defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asChar();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Color. Returns defaultValue if not found. */
-    public Color getColorOfIndex(String name, int namedIndex, Color defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asColor();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Vector3. Returns defaultValue if not found. */
-    public Vector3 getVector3OfIndex(String name, int namedIndex, Vector3 defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asVector3();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Vector2. Returns defaultValue if not found. */
-    public Vector2 getVector2OfIndex(String name, int namedIndex, Vector2 defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asVector2();
-    }
-
-    /** Finds the child with the specified name & index and returns it as an Enum. Returns defaultValue if not found. */
-    public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, T defaultValue) {
-        VDFNode child = get(name, namedIndex);
-        return (child == null) ? defaultValue : child.asEnum(defaultValue);
-    }
-
-    /** Finds the child with the specified name & index and returns it as a string.
-     * @throws IllegalArgumentException if the child was not found. */
-    public String getStringOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asString();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a float.
-     * @throws IllegalArgumentException if the child was not found. */
-    public float getFloatOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asFloat();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a double.
-     * @throws IllegalArgumentException if the child was not found. */
-    public double getDoubleOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asDouble();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a long.
-     * @throws IllegalArgumentException if the child was not found. */
-    public long getLongOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asLong();
-    }
-
-    /** Finds the child with the specified name & index and returns it as an int.
-     * @throws IllegalArgumentException if the child was not found. */
-    public int getIntOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asInt();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a boolean.
-     * @throws IllegalArgumentException if the child was not found. */
-    public boolean getBooleanOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asBoolean();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a byte.
-     * @throws IllegalArgumentException if the child was not found. */
-    public byte getByteOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asByte();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a short.
-     * @throws IllegalArgumentException if the child was not found. */
-    public short getShortOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asShort();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a char.
-     * @throws IllegalArgumentException if the child was not found. */
-    public char getCharOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asChar();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Color.
-     * @throws IllegalArgumentException if the child was not found. */
-    public Color getColorOfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asColor();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Vector3.
-     * @throws IllegalArgumentException if the child was not found. */
-    public Vector3 getVector3OfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asVector3();
-    }
-
-    /** Finds the child with the specified name & index and returns it as a Vector2.
-     * @throws IllegalArgumentException if the child was not found. */
-    public Vector2 getVector2OfIndex(String name, int namedIndex) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asVector2();
-    }
-
-    /** Finds the child with the specified name & index and returns it as an Enum.
-     * @throws IllegalArgumentException if the child was not found. */
-    public <T extends Enum<T>> T getEnumOfIndex(String name, int namedIndex, Class<T> enumClass) {
-        VDFNode child = get(name, namedIndex);
-        if (child == null) throw new IllegalArgumentException("Named value not found: " + name + " for index: " + namedIndex);
-        return child.asEnum(enumClass);
-    }
-
-    /** Finds the child with the specified name and returns it as a string. Returns defaultValue if not found.
-     * @param defaultValue May be null. */
+    /** Finds the child node with the specified name and returns its value as a String.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a String */
     public String getString (String name, String defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asString();
+        return child == null ? defaultValue : child.asString();
     }
 
-    /** Finds the child with the specified name and returns it as a float. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a float.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a float */
     public float getFloat (String name, float defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asFloat();
+        return child == null ? defaultValue : child.asFloat();
     }
 
-    /** Finds the child with the specified name and returns it as a double. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a double.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a double */
     public double getDouble (String name, double defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asDouble();
+        return child == null ? defaultValue : child.asDouble();
     }
 
-    /** Finds the child with the specified name and returns it as a long. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a long.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a long */
     public long getLong (String name, long defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asLong();
+        return child == null ? defaultValue : child.asLong();
     }
 
-    /** Finds the child with the specified name and returns it as an int. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as an int.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as an int */
     public int getInt (String name, int defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asInt();
+        return child == null ? defaultValue : child.asInt();
     }
 
-    /** Finds the child with the specified name and returns it as a boolean. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a boolean.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a boolean */
     public boolean getBoolean (String name, boolean defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asBoolean();
+        return child == null ? defaultValue : child.asBoolean();
     }
 
-    /** Finds the child with the specified name and returns it as a byte. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a byte.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a byte */
     public byte getByte (String name, byte defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asByte();
+        return child == null ? defaultValue : child.asByte();
     }
 
-    /** Finds the child with the specified name and returns it as a short. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a short.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a short */
     public short getShort (String name, short defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asShort();
+        return child == null ? defaultValue : child.asShort();
     }
 
-    /** Finds the child with the specified name and returns it as a char. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a char.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a char */
     public char getChar (String name, char defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asChar();
+        return child == null ? defaultValue : child.asChar();
     }
 
-    /** Finds the child with the specified name and returns it as a Color. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Color}.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a {@link Color} */
     public Color getColor (String name, Color defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asColor();
+        return child == null ? defaultValue : child.asColor();
     }
 
-    /** Finds the child with the specified name and returns it as a Vector3. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Vector3}.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a {@link Vector3} */
     public Vector3 getVector3 (String name, Vector3 defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asVector3();
+        return child == null ? defaultValue : child.asVector3();
     }
 
-    /** Finds the child with the specified name and returns it as a Vector2. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Vector2}.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as a {@link Vector2} */
     public Vector2 getVector2 (String name, Vector2 defaultValue) {
         VDFNode child = get(name);
-        return (child == null) ? defaultValue : child.asVector2();
+        return child == null ? defaultValue : child.asVector2();
     }
 
-    /** Finds the child with the specified name and returns it as an Enum. Returns defaultValue if not found. */
+    /** Finds the child node with the specified name and returns its value as an Enum.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as an Enum */
     public <T extends Enum<T>> T getEnum (String name, T defaultValue) {
         VDFNode child = get(name);
         return (child == null) ? defaultValue : child.asEnum(defaultValue);
     }
 
-    /** Finds the child with the specified name and returns it as a string.
+    /** Finds the child node with the specified name and returns its value as an Object.
+     * @param name of the child
+     * @param defaultValue to return if no child is found
+     * @return the child's value as an Object */
+    public Object getObject (String name, Object defaultValue) {
+        VDFNode child = get(name);
+        return child == null ? defaultValue : child.asObject();
+    }
+
+    /** Finds the child node with the specified name and returns its value as a String.
+     * @param name of the child
+     * @return the child's value as a String
      * @throws IllegalArgumentException if the child was not found. */
     public String getString (String name) {
         VDFNode child = get(name);
@@ -889,257 +875,332 @@ public class VDFNode {
         return child.asString();
     }
 
-    /** Finds the child with the specified name and returns it as a float.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a float.
+     * @param name of the child
+     * @return the child's value as a float
+     * @throws IllegalArgumentException if the child was not found */
     public float getFloat (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asFloat();
     }
 
-    /** Finds the child with the specified name and returns it as a double.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a double.
+     * @param name of the child
+     * @return the child's value as a double
+     * @throws IllegalArgumentException if the child was not found */
     public double getDouble (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asDouble();
     }
 
-    /** Finds the child with the specified name and returns it as a long.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a long.
+     * @param name of the child
+     * @return the child's value as a long
+     * @throws IllegalArgumentException if the child was not found */
     public long getLong (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asLong();
     }
 
-    /** Finds the child with the specified name and returns it as an int.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child with the specified name and returns its value as an int.
+     * @param name of the child node
+     * @return the child's value as an int
+     * @throws IllegalArgumentException if the child was not found */
     public int getInt (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asInt();
     }
 
-    /** Finds the child with the specified name and returns it as a boolean.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a boolean.
+     * @param name of the child
+     * @return the child's value as a boolean
+     * @throws IllegalArgumentException if the child was not found */
     public boolean getBoolean (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asBoolean();
     }
 
-    /** Finds the child with the specified name and returns it as a byte.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a byte.
+     * @param name of the child
+     * @return the child's value as a byte
+     * @throws IllegalArgumentException if the child was not found */
     public byte getByte (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asByte();
     }
 
-    /** Finds the child with the specified name and returns it as a short.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a short.
+     * @param name of the child
+     * @return the child's value as a short
+     * @throws IllegalArgumentException if the child was not found */
     public short getShort (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asShort();
     }
 
-    /** Finds the child with the specified name and returns it as a char.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a char.
+     * @param name of the child
+     * @return the child's value as a char
+     * @throws IllegalArgumentException if the child was not found */
     public char getChar (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asChar();
     }
 
-    /** Finds the child with the specified name and returns it as a Color.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Color}.
+     * @param name of the child
+     * @return the child's value as a {@link Color}
+     * @throws IllegalArgumentException if the child was not found */
     public Color getColor (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asColor();
     }
 
-    /** Finds the child with the specified name and returns it as a Vector3.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Vector3}.
+     * @param name of the child
+     * @return the child's value as a {@link Vector3}
+     * @throws IllegalArgumentException if the child was not found */
     public Vector3 getVector3 (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asVector3();
     }
 
-    /** Finds the child with the specified name and returns it as a Vector2.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as a {@link Vector2}.
+     * @param name of the child
+     * @return the child's value as a {@link Vector2}
+     * @throws IllegalArgumentException if the child was not found */
     public Vector2 getVector2 (String name) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asVector2();
     }
 
-    /** Finds the child with the specified name and returns it as an Enum.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as an Enum.
+     * @param name of the child
+     * @param enumClass of the child's value
+     * @return the child's value as an Enum
+     * @throws IllegalArgumentException if the child was not found */
     public <T extends Enum<T>> T getEnum (String name, Class<T> enumClass) {
         VDFNode child = get(name);
         if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
         return child.asEnum(enumClass);
     }
 
-    /** Finds the child with the specified index and returns it as a string.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified name and returns its value as an Object.
+     * @param name of the child
+     * @return the child's value as an Object
+     * @throws IllegalArgumentException if the child was not found */
+    public Object getObject (String name) {
+        VDFNode child = get(name);
+        if (child == null) throw new IllegalArgumentException("Named value not found: " + name);
+        return child.asObject();
+    }
+
+    /** Finds the child node with the specified index and returns its value as a String.
+     * @param index of the child node
+     * @return the child's value as a String
+     * @throws IllegalArgumentException if the child was not found */
     public String getString (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asString();
     }
 
-    /** Finds the child with the specified index and returns it as a float.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a float.
+     * @param index of the child node
+     * @return the child's value as a float
+     * @throws IllegalArgumentException if the child was not found */
     public float getFloat (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asFloat();
     }
 
-    /** Finds the child with the specified index and returns it as a double.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a double.
+     * @param index of the child node
+     * @return the child's value as a double
+     * @throws IllegalArgumentException if the child was not found */
     public double getDouble (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asDouble();
     }
 
-    /** Finds the child with the specified index and returns it as a long.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a long.
+     * @param index of the child node
+     * @return the child's value as a long
+     * @throws IllegalArgumentException if the child was not found */
     public long getLong (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asLong();
     }
 
-    /** Finds the child with the specified index and returns it as an int.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as an int.
+     * @param index of the child node
+     * @return the child's value as an int
+     * @throws IllegalArgumentException if the child was not found */
     public int getInt (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asInt();
     }
 
-    /** Finds the child with the specified index and returns it as a boolean.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a boolean.
+     * @param index of the child node
+     * @return the child's value as a boolean
+     * @throws IllegalArgumentException if the child was not found */
     public boolean getBoolean (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asBoolean();
     }
 
-    /** Finds the child with the specified index and returns it as a byte.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a byte.
+     * @param index of the child node
+     * @return the child's value as a byte
+     * @throws IllegalArgumentException if the child was not found */
     public byte getByte (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asByte();
     }
 
-    /** Finds the child with the specified index and returns it as a short.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a short.
+     * @param index of the child node
+     * @return the child's value as a short
+     * @throws IllegalArgumentException if the child was not found */
     public short getShort (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asShort();
     }
 
-    /** Finds the child with the specified index and returns it as a char.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a char.
+     * @param index of the child node
+     * @return the child's value as a char
+     * @throws IllegalArgumentException if the child was not found */
     public char getChar (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asChar();
     }
 
-    /** Finds the child with the specified index and returns it as a Color.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a {@link Color}.
+     * @param index of the child node
+     * @return the child's value as a {@link Color}
+     * @throws IllegalArgumentException if the child was not found */
     public Color getColor (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asColor();
     }
 
-    /** Finds the child with the specified index and returns it as a Color.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a {@link Vector3}.
+     * @param index of the child node
+     * @return the child's value as a {@link Vector3}
+     * @throws IllegalArgumentException if the child was not found */
     public Vector3 getVector3 (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asVector3();
     }
 
-    /** Finds the child with the specified index and returns it as a Color.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as a {@link Vector2}.
+     * @param index of the child node
+     * @return the child's value as a {@link Vector2}
+     * @throws IllegalArgumentException if the child was not found */
     public Vector2 getVector2 (int index) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asVector2();
     }
 
-    /** Finds the child with the specified index and returns it as an Enum.
-     * @throws IllegalArgumentException if the child was not found. */
+    /** Finds the child node with the specified index and returns its value as an Enum.
+     * @param index of the child node
+     * @param enumClass of the child's value
+     * @return the child's value as an Enum
+     * @throws IllegalArgumentException if the child was not found */
     public <T extends Enum<T>> T getEnum (int index, Class<T> enumClass) {
         VDFNode child = get(index);
         if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
         return child.asEnum(enumClass);
     }
 
-    /** Returns the name for this object value.
-     * @return May be null. */
+    /** Finds the child node with the specified index and returns its value as an Object.
+     * @param index of the child node
+     * @return the child's value as an Object
+     * @throws IllegalArgumentException if the child was not found */
+    public Object getObject (int index) {
+        VDFNode child = get(index);
+        if (child == null) throw new IllegalArgumentException("Indexed value not found: " + name);
+        return child.asObject();
+    }
+
+    /**
+     * @return this node's name */
     public String name () {
         return name;
     }
 
-    /** Returns the parent for this value.
-     * @return May be null. */
+    /**
+     * @return this node's parent, may be null */
     public VDFNode parent () {
         return parent;
     }
 
-    /** Returns the first child for this object or array.
-     * @return May be null. */
+    /**
+     * @return this node's first child, may be null */
     public VDFNode child () {
         return child;
     }
 
     /**
-     * @return whether this node has a parent. */
+     * @return whether this node has a parent */
     public boolean hasParent () {
         return parent != null;
     }
 
     /**
-     * @return whether the value of this node is null. */
+     * @return whether the value of this node is null */
     public boolean isNull () {
         return value == null;
     }
 
-    /** Sets the name of the specified value and adds it after the last child. */
-    public void addChild (String name, VDFNode value) {
-        if (name == null) throw new IllegalArgumentException("name cannot be null.");
-        value.name = name;
-        addChild(value);
+    /** Sets the name of the specified node and adds it after the last child.
+     * @param name of the node to add
+     * @param node to add after the last child
+     * @throws IllegalArgumentException if name is null */
+    public void addChild (String name, VDFNode node) {
+        if (name == null) throw new IllegalArgumentException("Name cannot be null.");
+        node.name = name;
+        addChild(node);
     }
 
-    /** Adds the specified value after the last child.
-     * @throws IllegalStateException if this is an object and the specified child's name is null. */
-    public void addChild (VDFNode value) {
-        if (value.name == null) throw new IllegalStateException("An object child requires a name: " + value);
-        value.parent = this;
+    /** Adds the specified node after the last child.
+     * @throws IllegalStateException if the node's name is null */
+    public void addChild (VDFNode node) {
+        if (node.name == null) throw new IllegalStateException("An object child requires a name: " + node);
+        node.parent = this;
         size++;
         VDFNode current = child;
         if (current == null)
-            child = value;
+            child = node;
         else {
             while (true) {
                 if (current.next == null) {
-                    current.next = value;
-                    value.prev = current;
+                    current.next = node;
+                    node.prev = current;
                     return;
                 }
                 current = current.next;
@@ -1147,19 +1208,31 @@ public class VDFNode {
         }
     }
 
-    /** Returns the next sibling of this value.
-     * @return May be null. */
+    /**
+     * @return the next sibling of this node, may be null. */
     public VDFNode next () {
         return next;
     }
 
-    /** Returns the previous sibling of this value.
-     * @return May be null. */
+    /**
+     * @return the previous sibling of this node, may be null */
     public VDFNode prev () {
         return prev;
     }
 
-    /** @param value May be null. */
+    /**
+     * @return the root node of the entire object graph */
+    public VDFNode root () {
+        VDFNode node = this;
+        while (node.hasParent()) {
+            node = node.parent;
+        }
+        return node;
+    }
+
+    /**
+     * Sets this node's value.
+     * @param value to set, may be null. */
     public void set (String value) {
         this.value = value;
     }
@@ -1170,27 +1243,17 @@ public class VDFNode {
 
     @Override
     public String toString() {
-        if (isEmpty()) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("\"").append(name).append("\"");
-            builder.append(" ");
-            builder.append("\"").append(value).append("\"");
-            return builder.toString();
-        }
-        else {
-            return toVDF();
-        }
+        return toVDF();
     }
 
     /**
-     * Returns a human readable string representing the path from the root of the VDF object graph to this value.
-     */
+     * @return a human readable string representing this node and all of its children. */
     public String toVDF() {
-        return toVDF(this, new StringBuilder(), new StringBuilder());
+        return toVDF(this, this, new StringBuilder(), new StringBuilder());
     }
 
-    private String toVDF(VDFNode root, StringBuilder whitespace, StringBuilder builder) {
-        VDFNode current = root.parent != null ? root : root.child;
+    private String toVDF(VDFNode root, VDFNode current, StringBuilder whitespace, StringBuilder builder) {
+        current = current.parent != null ? current : current.child;     // takes care of the root
         while (current != null) {
             builder.append(whitespace);
             builder.append("\"").append(current.name).append("\"");
@@ -1206,7 +1269,7 @@ public class VDFNode {
                 if (child != null) {
                     builder.append("\n");
                     whitespace.append("    ");
-                    toVDF(current.child, whitespace, builder);
+                    toVDF(root, current.child, whitespace, builder);
                     whitespace.setLength(whitespace.length() - 4);
                     builder.append(whitespace);
                 }
@@ -1215,6 +1278,12 @@ public class VDFNode {
                     builder.append(whitespace);
                 }
                 builder.append("}");
+            }
+            if (current == root) {
+                if (!current.isEmpty()) {
+                    builder.append("\n");
+                }
+                break;
             }
             builder.append("\n");
             current = current.next;

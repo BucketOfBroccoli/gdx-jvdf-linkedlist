@@ -3,6 +3,7 @@ package it.aretesoftware.gdx.jvdf;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,10 +17,10 @@ import java.util.List;
 public class TestVDFParser extends BaseTest {
 
     private final VDFParser parser = new VDFParser();
-    private final String sample = getFileContents("resources/sample.txt");
-    private final String sample_multimap = getFileContents("resources/sample_multimap.txt");
-    private final String sample_types = getFileContents("resources/sample_types.txt");
-    private final String sample_arrays = getFileContents("resources/sample_arrays.txt");
+    private final String sample = getFileContents("sample.txt");
+    private final String sample_multimap = getFileContents("sample_multimap.txt");
+    private final String sample_types = getFileContents("sample_types.txt");
+    private final String sample_arrays = getFileContents("sample_arrays.txt");
     private final String VDF_SIMPLE_TEST = "key value";
     private final String VDF_SIMPLE_TEST_RESULT = "value";
 
@@ -148,8 +149,8 @@ public class TestVDFParser extends BaseTest {
                 .get("key", 1).asString());
 
         // sub_node
-        List<VDFNode> nodes = root.get("root_node").asArray("sub_node");
-        Assert.assertEquals(2, nodes.size());
+        Array<VDFNode> nodes = root.get("root_node").asArray("sub_node");
+        Assert.assertEquals(2, nodes.size);
         // first
         VDFNode subNode = nodes.get(0);
         VDFNode node = subNode.get("key");
@@ -192,6 +193,12 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("vec3"));
         Assert.assertEquals(new Vector2(0, 1), node.getVector2("vec2"));
         Assert.assertEquals(ExampleEnum.first, node.getEnum("enum", ExampleEnum.class));
+        Assert.assertEquals(node.getObject("int"), 100);
+        Assert.assertEquals(node.getObject("float"), 123.456f);
+        Assert.assertEquals(node.getObject("boolean"), true);
+        Assert.assertEquals(node.getObject("color"), Color.WHITE);
+        Assert.assertEquals(node.getObject("vec3"), new Vector3(1f, 1f, 1f));
+        Assert.assertEquals(node.getObject("vec2"), new Vector2(0f, 1f));
         // get by index
         Assert.assertEquals("Test!", node.getString(5));
         Assert.assertEquals(123.456f, node.getFloat(3), 0);
@@ -205,14 +212,28 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(Color.WHITE, node.getColor(7));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3(8));
         Assert.assertEquals(new Vector2(0, 1), node.getVector2(9));
+        Assert.assertEquals(node.getObject(1), 100);
+        Assert.assertEquals(node.getObject(3), 123.456f);
+        Assert.assertEquals(node.getObject(4), true);
+        Assert.assertEquals(node.getObject(7), Color.WHITE);
+        Assert.assertEquals(node.getObject(8), new Vector3(1f, 1f, 1f));
+        Assert.assertEquals(node.getObject(9), new Vector2(0f, 1f));
+
+
+        Assert.assertEquals(node.get(1).asObject(), 100);
+        Assert.assertEquals(node.get(3).asObject(), 123.456f);
+        Assert.assertEquals(node.get(4).asObject(), true);
+        Assert.assertEquals(node.get(7).asObject(), Color.WHITE);
+        Assert.assertEquals(node.get(8).asObject(), new Vector3(1f, 1f, 1f));
+        Assert.assertEquals(node.get(9).asObject(), new Vector2(0f, 1f));
     }
 
     @Test
     public void testArrays() {
         VDFNode root = parser.parse(sample_arrays).get("root_node");
         // VDFNode
-        List<VDFNode> vdfValues = root.asArray("vdfValues");
-        Assert.assertEquals(4, vdfValues.size());
+        Array<VDFNode> vdfValues = root.asArray("vdfValues");
+        Assert.assertEquals(4, vdfValues.size);
         Assert.assertEquals(0.1f, vdfValues.get(0).asFloat(), 0f);
         Assert.assertTrue(vdfValues.get(1).asBoolean());
         Assert.assertEquals("Test!", vdfValues.get(2).asString());
@@ -300,6 +321,15 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(ExampleEnum.fifth, enumValues.get(0));
         Assert.assertEquals(ExampleEnum.fourth, enumValues.get(1));
         Assert.assertEquals(ExampleEnum.third, enumValues.get(2));
+        // Object
+        List<Object> objectValues = root.asObjectArray("objectValues");
+        Assert.assertEquals(1, objectValues.get(0));
+        Assert.assertEquals(1f, objectValues.get(1));
+        Assert.assertEquals(true, objectValues.get(2));
+        Assert.assertEquals(Color.WHITE, objectValues.get(3));
+        Assert.assertEquals(new Vector3(1f, 1f, 1f), objectValues.get(4));
+        Assert.assertEquals(new Vector2(1f, 1f), objectValues.get(5));
+        Assert.assertEquals("Test!", objectValues.get(6));
     }
 
     @Test
@@ -319,22 +349,10 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3("", new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.getVector2("", new Vector2(1, 1)));
         Assert.assertEquals(ExampleEnum.second, node.getEnum("", ExampleEnum.second));
-        // get by name & index
-        Assert.assertEquals("defaultValue", node.getStringOfIndex("", 1, "defaultValue"));
-        Assert.assertEquals(10f, node.getFloatOfIndex("", 1, 10f), 0);
-        Assert.assertEquals(10d, node.getDoubleOfIndex("",  1, 10d), 0);
-        Assert.assertEquals(10L, node.getLongOfIndex("", 1, 10L), 0);
-        Assert.assertEquals(10, node.getIntOfIndex("", 1, 10), 0);
-        Assert.assertTrue(node.getBooleanOfIndex("", 1, true));
-        Assert.assertEquals(10, node.getByteOfIndex("", 1, (byte) 10), 0);
-        Assert.assertEquals(10, node.getShortOfIndex("", 1, (short) 10), 0);
-        Assert.assertEquals('a', node.getCharOfIndex("", 1, 'a'));
-        Assert.assertEquals(Color.WHITE, node.getColorOfIndex("", 1, Color.WHITE));
-        Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3OfIndex("", 1, new Vector3(1, 1, 1)));
-        Assert.assertEquals(new Vector2(1, 1), node.getVector2OfIndex("", 1, new Vector2(1, 1)));
-        Assert.assertEquals(ExampleEnum.second, node.getEnumOfIndex("", 1, ExampleEnum.second));
+        Assert.assertEquals(Color.WHITE, node.getObject("", Color.WHITE));
         // as
         Assert.assertEquals("defaultValue", node.asString("defaultValue"));
+        Assert.assertEquals(10, node.asInt(10), 0);
         Assert.assertEquals(10f, node.asFloat(10f), 0);
         Assert.assertEquals(10d, node.asDouble(10d), 0);
         Assert.assertEquals(10L, node.asLong(10L), 0);
@@ -347,7 +365,7 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(new Vector3(1, 1, 1), node.asVector3(new Vector3(1, 1, 1)));
         Assert.assertEquals(new Vector2(1, 1), node.asVector2(new Vector2(1, 1)));
         Assert.assertEquals(ExampleEnum.fifth, node.asEnum(ExampleEnum.fifth));
-
+        Assert.assertEquals(Color.WHITE, node.asObject(Color.WHITE));
     }
 
 }
