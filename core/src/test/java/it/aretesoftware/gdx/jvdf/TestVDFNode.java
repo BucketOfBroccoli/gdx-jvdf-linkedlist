@@ -1,7 +1,5 @@
 package it.aretesoftware.gdx.jvdf;
 
-import com.badlogic.gdx.utils.JsonValue;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,13 +21,13 @@ public class TestVDFNode extends BaseTest {
         Assert.assertTrue(node.notEmpty());
         Assert.assertFalse(node.isEmpty());
         Assert.assertEquals(2, node.size);
-        Assert.assertEquals(1, node.sizeOf("first_sub_node"));
+        Assert.assertEquals(1, node.count("first_sub_node"));
 
         node = new VDFNode();
         Assert.assertTrue(node.isEmpty());
         Assert.assertFalse(node.notEmpty());
         Assert.assertEquals(0, node.size);
-        Assert.assertEquals(0, node.sizeOf(""));
+        Assert.assertEquals(0, node.count(""));
     }
 
     @Test

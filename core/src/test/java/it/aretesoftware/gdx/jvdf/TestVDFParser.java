@@ -138,7 +138,7 @@ public class TestVDFParser extends BaseTest {
     public void testMultimap() {
         VDFNode root = parser.parse(sample_multimap);
 
-        Assert.assertEquals(2, root.get("root_node").sizeOf("sub_node"));
+        Assert.assertEquals(2, root.get("root_node").count("sub_node"));
         Assert.assertEquals("value1", root
                 .get("root_node")
                 .get("sub_node", 0)

@@ -206,7 +206,10 @@ public class VDFNode {
         return size;
     }
 
-    public int sizeOf(String name) {
+    /**
+     * @param name of the children to count
+     * @return the number of children with the specified name */
+    public int count(String name) {
         VDFNode current = child;
         int count = 0;
         while (current != null) {
