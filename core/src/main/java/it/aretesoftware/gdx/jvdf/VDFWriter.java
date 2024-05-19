@@ -66,12 +66,12 @@ public class VDFWriter {
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a String
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, String value) {
+    public VDFWriter writeValue(String name, String value) {
         builder.append(whitespace)
-                .append(QUOTES).append(key).append(QUOTES)
+                .append(QUOTES).append(name).append(QUOTES)
                 .append(SPACE)
                 .append(QUOTES).append(value).append(QUOTES)
                 .append(NEWLINE);
@@ -80,288 +80,276 @@ public class VDFWriter {
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a float
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, float value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, float value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a double
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, double value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, double value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a long
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, long value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, long value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a int
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, int value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, int value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a boolean
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, boolean value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, boolean value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a byte
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, byte value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, byte value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a short
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, short value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, short value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a char
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, char value) {
-        return this.writeValue(key, String.valueOf(value));
+    public VDFWriter writeValue(String name, char value) {
+        return this.writeValue(name, String.valueOf(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a {@link Color}
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Color value) {
-        return this.writeValue(key, VDFUtils.toColorString(value));
+    public VDFWriter writeValue(String name, Color value) {
+        return this.writeValue(name, VDFUtils.toColorString(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a {@link Vector3}
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Vector3 value) {
-        return this.writeValue(key, VDFUtils.toVector3String(value));
+    public VDFWriter writeValue(String name, Vector3 value) {
+        return this.writeValue(name, VDFUtils.toVector3String(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as a {@link Vector2}
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeValue(String key, Vector2 value) {
-        return this.writeValue(key, VDFUtils.toVector2String(value));
+    public VDFWriter writeValue(String name, Vector2 value) {
+        return this.writeValue(name, VDFUtils.toVector2String(value));
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated value
+     * @param name the name of the associated value
      * @param value the value to write, as an Enum
      * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeValue(String key, T value) {
-        return this.writeValue(key, value.name());
+    public <T extends Enum<T>> VDFWriter writeValue(String name, T value) {
+        return this.writeValue(name, value.name());
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the String array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, String... values) {
+    public VDFWriter writeMultimapValue(String name, String... values) {
         for (String value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the float array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, float... values) {
+    public VDFWriter writeMultimapValue(String name, float... values) {
         for (float value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the double array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, double... values) {
+    public VDFWriter writeMultimapValue(String name, double... values) {
         for (double value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the long array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, long... values) {
+    public VDFWriter writeMultimapValue(String name, long... values) {
         for (long value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the int array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, int... values) {
+    public VDFWriter writeMultimapValue(String name, int... values) {
         for (int value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the boolean array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, boolean... values) {
+    public VDFWriter writeMultimapValue(String name, boolean... values) {
         for (boolean value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the byte array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, byte... values) {
+    public VDFWriter writeMultimapValue(String name, byte... values) {
         for (byte value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the short array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, short... values) {
+    public VDFWriter writeMultimapValue(String name, short... values) {
         for (short value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the char array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, char... values) {
+    public VDFWriter writeMultimapValue(String name, char... values) {
         for (char value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the {@link Color} array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Color... values) {
+    public VDFWriter writeMultimapValue(String name, Color... values) {
         for (Color value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the {@link Vector3} array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Vector3... values) {
+    public VDFWriter writeMultimapValue(String name, Vector3... values) {
         for (Vector3 value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the {@link Vector2} array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Vector2... values) {
+    public VDFWriter writeMultimapValue(String name, Vector2... values) {
         for (Vector2 value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the Enum array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeMultimapValue(String key, T... values) {
+    public <T extends Enum<T>> VDFWriter writeMultimapValue(String name, T... values) {
         for (T value : values) {
-            writeValue(key, value);
+            writeValue(name, value);
         }
         return this;
     }
 
     /**
      * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
-     * @param values the Enum array of values to write
-     * @return this {@link VDFWriter} for chaining */
-    public <T extends Enum<T>> VDFWriter writeMultimapValue(String key, Class<T> enumClass, String... values) {
-        for (String value : values) {
-            writeValue(key, VDFUtils.toEnum(value, enumClass));
-        }
-        return this;
-    }
-
-    /**
-     * Writes a value in the current {@link VDFNode}.
-     * @param key the name of the associated values
+     * @param name the name of the associated values
      * @param values the Object array of values to write
      * @return this {@link VDFWriter} for chaining */
-    public VDFWriter writeMultimapValue(String key, Object[] values) {
+    public VDFWriter writeMultimapValue(String name, Object[] values) {
         for (Object value : values) {
-            this.writeValue(key, VDFUtils.toString(value));
+            this.writeValue(name, VDFUtils.toString(value));
         }
         return this;
     }

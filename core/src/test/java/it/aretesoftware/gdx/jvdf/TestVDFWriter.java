@@ -81,11 +81,11 @@ public class TestVDFWriter extends BaseTest {
 
     @Test
     public void testMisc() {
-        writer.writeMultimapValue("floatValues", 1f, 10f, -100f);
-        writer.writeMultimapValue("intValues", 1, 10, -100);
-        writer.writeMultimapValue("byteValues", (byte)1, (byte)10, (byte)-100);
-        writer.writeMultimapValue("shortValues", (short)1, (short)10, (short)-100);
-        writer.writeMultimapValue("enumValues", ExampleEnum.class, "first", "second", "third");
+        writer.writeMultimapValue("floatValues", new Object[] {1f, 10f, -100f});
+        writer.writeMultimapValue("intValues", new Object[] {1, 10, -100});
+        writer.writeMultimapValue("byteValues", new Object[] {(byte)1, (byte)10, (byte)-100});
+        writer.writeMultimapValue("shortValues", new Object[] {(short)1, (short)10, (short)-100});
+        writer.writeMultimapValue("enumValues", new Object[] {"first", "second", "third"});
         VDFParser parser = new VDFParser();
         VDFNode node = parser.parse(writer.toVDF());
         // Float
