@@ -34,7 +34,7 @@ public class TestVDFWriter extends BaseTest {
                 writer.writeValue("third", "value3");
             writer.writeNodeEnd();
         writer.writeNodeEnd();
-        String first = preprocessor.process(writer.toVDF());
+        String first = preprocessor.process(writer.toVDFString());
         String second = preprocessor.process(sample);
         Assert.assertEquals(first, second);
     }
@@ -55,9 +55,9 @@ public class TestVDFWriter extends BaseTest {
             writer.writeValue("enum", ExampleEnum.first);
         writer.writeNodeEnd();
         VDFParser parser = new VDFParser();
-        VDFNode firstNode = parser.parse(writer.toVDF());
+        VDFNode firstNode = parser.parse(writer.toVDFString());
         VDFNode secondNode = parser.parse(sample_types);
-        Assert.assertEquals(firstNode.toVDF(), secondNode.toVDF());
+        Assert.assertEquals(firstNode.toVDFString(), secondNode.toVDFString());
     }
 
     @Test
@@ -74,9 +74,9 @@ public class TestVDFWriter extends BaseTest {
             writer.writeMultimapValue("enumValues", ExampleEnum.fifth, ExampleEnum.fourth, ExampleEnum.third);
         writer.writeNodeEnd();
         VDFParser parser = new VDFParser();
-        VDFNode firstNode = parser.parse(writer.toVDF());
+        VDFNode firstNode = parser.parse(writer.toVDFString());
         VDFNode secondNode = parser.parse(sample_arrays);
-        Assert.assertEquals(firstNode.toVDF(), secondNode.toVDF());
+        Assert.assertEquals(firstNode.toVDFString(), secondNode.toVDFString());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class TestVDFWriter extends BaseTest {
         writer.writeMultimapValue("shortValues", new Object[] {(short)1, (short)10, (short)-100});
         writer.writeMultimapValue("enumValues", new Object[] {"first", "second", "third"});
         VDFParser parser = new VDFParser();
-        VDFNode node = parser.parse(writer.toVDF());
+        VDFNode node = parser.parse(writer.toVDFString());
         // Float
         List<Float> floatValues = node.asFloatArray("floatValues");
         Assert.assertEquals(1f, floatValues.get(0), 0f);

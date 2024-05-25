@@ -1157,7 +1157,7 @@ public class VDFNode {
     }
 
     /**
-     * @return the next sibling of this node, may be null. */
+     * @return the next sibling of this node, may be null */
     public VDFNode next () {
         return next;
     }
@@ -1191,16 +1191,18 @@ public class VDFNode {
 
     @Override
     public String toString() {
-        return toVDF();
+        return toVDFString();
     }
 
     /**
-     * @return a human readable string representing this node and all of its children. */
-    public String toVDF() {
-        return toVDF(this, this, new StringBuilder(), new StringBuilder());
+     * @return a human readable String representing this node and all of its children.
+     * <br>
+     * Note that the string does <b>not</b> include this node's {@link #prev} and {@link #next} nodes. */
+    public String toVDFString() {
+        return toVDFString(this, this, new StringBuilder(), new StringBuilder());
     }
 
-    private String toVDF(VDFNode root, VDFNode current, StringBuilder whitespace, StringBuilder builder) {
+    private String toVDFString(VDFNode root, VDFNode current, StringBuilder whitespace, StringBuilder builder) {
         current = current.parent != null ? current : current.child;     // takes care of the root
         while (current != null) {
             builder.append(whitespace);
@@ -1217,7 +1219,7 @@ public class VDFNode {
                 if (child != null) {
                     builder.append("\n");
                     whitespace.append("    ");
-                    toVDF(root, current.child, whitespace, builder);
+                    toVDFString(root, current.child, whitespace, builder);
                     whitespace.setLength(whitespace.length() - 4);
                     builder.append(whitespace);
                 }

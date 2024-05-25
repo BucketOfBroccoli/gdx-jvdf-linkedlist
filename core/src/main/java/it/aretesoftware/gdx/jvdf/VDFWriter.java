@@ -65,6 +65,32 @@ public class VDFWriter {
     }
 
     /**
+     * Writes a node in the current {@link VDFNode}.
+     * Note that this uses the {@link VDFNode}'s toVDF() output,
+     * meaning that the "prev" and "next" nodes will not be written.
+     * @param node to write
+     * @return this {@link VDFWriter} for chaining */
+    public VDFWriter writeNode(VDFNode node) {
+        builder.append(whitespace)
+                .append(QUOTES).append(node.toVDFString()).append(QUOTES)
+                .append(NEWLINE);
+        return this;
+    }
+
+    /**
+     * Writes multiple nodes in the current {@link VDFNode}.
+     * Note that this uses the {@link VDFNode}'s toVDF() output,
+     * meaning that the "prev" and "next" nodes will not be written.
+     * @param nodes to write
+     * @return this {@link VDFWriter} for chaining */
+    public VDFWriter writeNodes(VDFNode... nodes) {
+        for (VDFNode node : nodes) {
+            writeNode(node);
+        }
+        return this;
+    }
+
+    /**
      * Writes a value in the current {@link VDFNode}.
      * @param name the name of the associated value
      * @param value the value to write, as a String
@@ -354,11 +380,23 @@ public class VDFWriter {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return toVDFString();
+    }
+
     /**
      * Returns the contents of the {@link StringBuilder}, in a VDF format.
      * @return the VDF document as a String. */
-    public String toVDF() {
+    public String toVDFString() {
         return builder.toString();
+    }
+
+    /**
+     * Returns the parsed contents of the {@link StringBuilder}.
+     * @return the VDF document as a {@link VDFNode}. */
+    public VDFNode toVDFNode() {
+        return new VDFParser().parse(toVDFString());
     }
 
 }

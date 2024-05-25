@@ -24,7 +24,7 @@ public class TestItemSchema extends BaseTest {
 
         VDFPreprocessor preprocessor = new VDFPreprocessor();
         String processed1 = preprocessor.process(contents);
-        String processed2 = preprocessor.process(root.toVDF());
+        String processed2 = preprocessor.process(root.toVDFString());
         Assert.assertEquals(processed1.length(), processed2.length());
         Assert.assertEquals(processed1, processed2);
     }

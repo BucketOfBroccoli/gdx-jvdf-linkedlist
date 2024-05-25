@@ -139,7 +139,7 @@ public class TestVDFNode extends BaseTest {
         testToVDF(sample_multimap);
         // sub node
         VDFNode node = parser.parse(sample);
-        String result = node.get("root_node").get("first_sub_node").toVDF();
+        String result = node.get("root_node").get("first_sub_node").toVDFString();
         if (!result.startsWith("\"first_sub_node\" \n{") || !result.endsWith("}\n")) {
             Assert.assertEquals("toVDF() not working", "");
         }
@@ -147,7 +147,7 @@ public class TestVDFNode extends BaseTest {
 
     private void testToVDF(String vdfString) {
         VDFNode node = parser.parse(vdfString);
-        String first = preprocessor.process(node.toVDF());
+        String first = preprocessor.process(node.toVDFString());
         String second = preprocessor.process(vdfString);
         Assert.assertEquals(first, second);
     }
