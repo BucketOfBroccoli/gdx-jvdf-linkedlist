@@ -66,20 +66,20 @@ public class VDFWriter {
 
     /**
      * Writes a node in the current {@link VDFNode}.
-     * Note that this uses the {@link VDFNode}'s toVDF() output,
+     * Note that this uses the {@link VDFNode}'s toVDFString() output,
      * meaning that the "prev" and "next" nodes will not be written.
      * @param node to write
      * @return this {@link VDFWriter} for chaining */
     public VDFWriter writeNode(VDFNode node) {
         builder.append(whitespace)
-                .append(QUOTES).append(node.toVDFString()).append(QUOTES)
+                .append(node.toVDFString())
                 .append(NEWLINE);
         return this;
     }
 
     /**
      * Writes multiple nodes in the current {@link VDFNode}.
-     * Note that this uses the {@link VDFNode}'s toVDF() output,
+     * Note that this uses the {@link VDFNode}'s toVDFString() output,
      * meaning that the "prev" and "next" nodes will not be written.
      * @param nodes to write
      * @return this {@link VDFWriter} for chaining */
