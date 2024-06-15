@@ -21,9 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -512,8 +510,8 @@ public class VDFNode {
     /** Returns the values of children nodes as a newly allocated String {@link Array}.
      * @param name of the children nodes
      * @return String {@link Array} filled with said nodes' values */
-    public List<String> asStringArray (String name) {
-        List<String> list = new ArrayList<>();
+    public Array<String> asStringArray (String name) {
+       Array<String> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -527,8 +525,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return float {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Float> asFloatArray (String name) {
-        List<Float> list = new ArrayList<>();
+    public Array<Float> asFloatArray (String name) {
+        Array<Float> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -542,8 +540,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return double {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Double> asDoubleArray (String name) {
-        List<Double> list = new ArrayList<>();
+    public Array<Double> asDoubleArray (String name) {
+        Array<Double> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -557,8 +555,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return long {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Long> asLongArray (String name) {
-        List<Long> list = new ArrayList<>();
+    public Array<Long> asLongArray (String name) {
+        Array<Long> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -572,8 +570,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return int {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Integer> asIntArray (String name) {
-        List<Integer> list = new ArrayList<>();
+    public Array<Integer> asIntArray (String name) {
+        Array<Integer> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -587,8 +585,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return boolean {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Boolean> asBooleanArray (String name) {
-        List<Boolean> list = new ArrayList<>();
+    public Array<Boolean> asBooleanArray (String name) {
+        Array<Boolean> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -602,8 +600,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return byte {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Byte> asByteArray (String name) {
-        List<Byte> list = new ArrayList<>();
+    public Array<Byte> asByteArray (String name) {
+        Array<Byte> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -617,8 +615,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return short {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Short> asShortArray (String name) {
-        List<Short> list = new ArrayList<>();
+    public Array<Short> asShortArray (String name) {
+        Array<Short> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -632,8 +630,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return char {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Character> asCharArray (String name) {
-        List<Character> list = new ArrayList<>();
+    public Array<Character> asCharArray (String name) {
+        Array<Character> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -647,8 +645,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return {@link Color} {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Color> asColorArray (String name) {
-        List<Color> list = new ArrayList<>();
+    public Array<Color> asColorArray (String name) {
+        Array<Color> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -662,8 +660,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return {@link Vector3} {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Vector3> asVector3Array (String name) {
-        List<Vector3> list = new ArrayList<>();
+    public Array<Vector3> asVector3Array (String name) {
+        Array<Vector3> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -677,8 +675,8 @@ public class VDFNode {
      * @param name of the children nodes
      * @return {@link Vector2} {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public List<Vector2> asVector2Array (String name) {
-        List<Vector2> list = new ArrayList<>();
+    public Array<Vector2> asVector2Array (String name) {
+        Array<Vector2> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {
@@ -693,8 +691,8 @@ public class VDFNode {
      * @param enumClass of the Enum the values represent
      * @return Enum {@link Array} filled with said nodes' values
      * @throws IllegalStateException if any of the values are null */
-    public <T extends Enum<T>> List<T> asEnumArray (String name, Class<T> enumClass) {
-        List<T> list = new ArrayList<>();
+    public <T extends Enum<T>> Array<T> asEnumArray (String name, Class<T> enumClass) {
+        Array<T> list = new Array<>();
         int i = 0;
         for (VDFNode value = child; value != null; value = value.next, i++) {
             if (name.equals(value.name)) {

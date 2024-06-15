@@ -3,11 +3,10 @@ package it.aretesoftware.gdx.jvdf;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * @author BucketOfBroccoli
@@ -89,27 +88,27 @@ public class TestVDFWriter extends BaseTest {
         VDFParser parser = new VDFParser();
         VDFNode node = parser.parse(writer.toVDFString());
         // Float
-        List<Float> floatValues = node.asFloatArray("floatValues");
+        Array<Float> floatValues = node.asFloatArray("floatValues");
         Assert.assertEquals(1f, floatValues.get(0), 0f);
         Assert.assertEquals(10f, floatValues.get(1), 0f);
         Assert.assertEquals(-100f, floatValues.get(2), 0f);
         // Int
-        List<Integer> intValues = node.asIntArray("intValues");
+        Array<Integer> intValues = node.asIntArray("intValues");
         Assert.assertEquals(1, intValues.get(0), 0f);
         Assert.assertEquals(10, intValues.get(1), 0f);
         Assert.assertEquals(-100, intValues.get(2), 0f);
         // Byte
-        List<Byte> byteValues = node.asByteArray("byteValues");
+        Array<Byte> byteValues = node.asByteArray("byteValues");
         Assert.assertEquals(1, byteValues.get(0), 0);
         Assert.assertEquals(10, byteValues.get(1), 0f);
         Assert.assertEquals(-100, byteValues.get(2), 0f);
         // Short
-        List<Short> shortValues = node.asShortArray("shortValues");
+        Array<Short> shortValues = node.asShortArray("shortValues");
         Assert.assertEquals(1, shortValues.get(0), 0);
         Assert.assertEquals(10, shortValues.get(1), 0f);
         Assert.assertEquals(-100, shortValues.get(2), 0f);
         // Enum
-        List<ExampleEnum> enumValues = node.asEnumArray("enumValues", ExampleEnum.class);
+        Array<ExampleEnum> enumValues = node.asEnumArray("enumValues", ExampleEnum.class);
         Assert.assertEquals(ExampleEnum.first, enumValues.get(0));
         Assert.assertEquals(ExampleEnum.second, enumValues.get(1));
         Assert.assertEquals(ExampleEnum.third, enumValues.get(2));
