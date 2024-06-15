@@ -68,7 +68,7 @@ public class VDFNode {
     /** Returns the child at the specified index. This requires walking the linked list to the specified entry,
      * see {@link VDFNode} for how to iterate efficiently.
      * @param index of the child to return
-     * @return the child, may be null */
+     * @return the child node, may be null */
     public VDFNode get (int index) {
         VDFNode current = child;
         while (current != null && index > 0) {
@@ -76,6 +76,16 @@ public class VDFNode {
             current = current.next;
         }
         return current;
+    }
+
+    /** Returns the child at the specified index. This requires walking the linked list to the specified entry,
+     * see {@link VDFNode} for how to iterate efficiently.
+     * @param index of the child to return
+     * @param defaultValue to return if no child node is found
+     * @return the child node */
+    public VDFNode get (int index, VDFNode defaultValue) {
+        VDFNode node = get(index);
+        return node != null ? node : defaultValue;
     }
 
     /**
@@ -87,6 +97,16 @@ public class VDFNode {
         while (current != null && (current.name == null || !current.name.equalsIgnoreCase(name)))
             current = current.next;
         return current;
+    }
+
+    /**
+     * Returns the child node with the specified name.
+     * @param name of the child
+     * @param defaultValue to return if no child node is found
+     * @return the child node */
+    public VDFNode get (String name, VDFNode defaultValue) {
+        VDFNode node = get(name);
+        return node != null ? node : defaultValue;
     }
 
     /** Returns the child node with the specified name and index.
@@ -1181,6 +1201,50 @@ public class VDFNode {
      * @param value to set, may be null. */
     public void set (String value) {
         this.value = value;
+    }
+
+    public void set (float value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (double value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (long value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (int value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (boolean value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (byte value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (short value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (char value) {
+        set(String.valueOf(value));
+    }
+
+    public void set (Color value) {
+        set(VDFUtils.toColorString(value));
+    }
+
+    public void set (Vector3 value) {
+        set(VDFUtils.toVector3String(value));
+    }
+
+    public void set (Vector2 value) {
+        set(VDFUtils.toVector2String(value));
     }
 
     public VDFIterator iterator () {

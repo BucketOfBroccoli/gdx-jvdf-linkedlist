@@ -1,5 +1,9 @@
 package it.aretesoftware.gdx.jvdf;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -105,6 +109,32 @@ public class TestVDFNode extends BaseTest {
         VDFNode firstSubNode = node.get("first_sub_node");
         firstSubNode.get("first").set("value");
         Assert.assertEquals("value", firstSubNode.get("first").asString());
+
+        node = new VDFNode("test");
+        node.set("test");
+        Assert.assertEquals(node.asString(), "test");
+        node.set(1f);
+        Assert.assertEquals(node.asString(), "1.0");
+        node.set(1d);
+        Assert.assertEquals(node.asString(), "1.0");
+        node.set(1L);
+        Assert.assertEquals(node.asString(), "1");
+        node.set(1);
+        Assert.assertEquals(node.asString(), "1");
+        node.set(true);
+        Assert.assertEquals(node.asString(), "true");
+        node.set((byte)1);
+        Assert.assertEquals(node.asString(), "1");
+        node.set((short)1);
+        Assert.assertEquals(node.asString(), "1");
+        node.set('a');
+        Assert.assertEquals(node.asString(), "a");
+        node.set(Color.WHITE);
+        Assert.assertEquals(node.asString(), "1.0 1.0 1.0 1.0");
+        node.set(Vector3.Zero);
+        Assert.assertEquals(node.asString(), "0.0 0.0 0.0");
+        node.set(Vector2.Zero);
+        Assert.assertEquals(node.asString(), "0.0 0.0");
     }
 
     @Test
