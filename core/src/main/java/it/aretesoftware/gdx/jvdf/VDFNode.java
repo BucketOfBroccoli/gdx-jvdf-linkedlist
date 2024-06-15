@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -1198,55 +1199,97 @@ public class VDFNode {
 
     /**
      * Sets this node's value.
-     * @param value to set, may be null. */
+     * @param value to set, may be null */
     public void set (String value) {
         this.value = value;
     }
 
+    /**
+     * Sets this node's value from a float.
+     * @param value to set */
     public void set (float value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a double.
+     * @param value to set */
     public void set (double value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a long.
+     * @param value to set */
     public void set (long value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a int.
+     * @param value to set */
     public void set (int value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a boolean.
+     * @param value to set */
     public void set (boolean value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a byte.
+     * @param value to set */
     public void set (byte value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a short.
+     * @param value to set */
     public void set (short value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a char.
+     * @param value to set */
     public void set (char value) {
         set(String.valueOf(value));
     }
 
+    /**
+     * Sets this node's value from a {@link Color}.
+     * @param value to set as a float */
     public void set (Color value) {
         set(VDFUtils.toColorString(value));
     }
 
+    /**
+     * Sets this node's value from a {@link Vector3}.
+     * @param value to set */
     public void set (Vector3 value) {
         set(VDFUtils.toVector3String(value));
     }
 
+    /**
+     * Sets this node's value from a {@link Vector2}.
+     * @param value to set */
     public void set (Vector2 value) {
         set(VDFUtils.toVector2String(value));
     }
 
+    /**
+     * Sets this node's value from an Enum.
+     * @param value to set */
+    public <T extends Enum<T>> void set (T value) {
+        set(value.name());
+    }
+
+    /**
+     * Iterates the children of this node. */
     public VDFIterator iterator () {
         return new VDFIterator();
     }

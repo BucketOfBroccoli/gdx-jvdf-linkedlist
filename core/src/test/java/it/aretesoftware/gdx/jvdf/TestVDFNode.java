@@ -135,6 +135,8 @@ public class TestVDFNode extends BaseTest {
         Assert.assertEquals(node.asString(), "0.0 0.0 0.0");
         node.set(Vector2.Zero);
         Assert.assertEquals(node.asString(), "0.0 0.0");
+        node.set(ExampleEnum.first);
+        Assert.assertEquals(node.asString(), "first");
     }
 
     @Test
