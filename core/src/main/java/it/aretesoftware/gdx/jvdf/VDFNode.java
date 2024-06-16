@@ -1144,6 +1144,15 @@ public class VDFNode {
         return value == null;
     }
 
+    /**
+     * Creates a node with the specified name and value and adds it after the last child.
+     * @param name of the node to add
+     * @param value of the node to add after the last child */
+    public void addChild (String name, String value) {
+        VDFNode node = new VDFNode(value);
+        addChild(name, node);
+    }
+
     /** Sets the name of the specified node and adds it after the last child.
      * @param name of the node to add
      * @param node to add after the last child
@@ -1198,7 +1207,7 @@ public class VDFNode {
     }
 
     /**
-     * Sets this node's value.
+     * Sets this node's value from a String.
      * @param value to set, may be null */
     public void set (String value) {
         this.value = value;
@@ -1287,6 +1296,145 @@ public class VDFNode {
     public <T extends Enum<T>> void set (T value) {
         set(value.name());
     }
+
+    /**
+     * Finds the node with the specified name and sets its value from a String.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, String value) {
+        VDFNode node = get(name);
+        if (node != null) {
+            node.set(value);
+        }
+        else {
+            node = new VDFNode(value);
+            addChild(name, node);
+        }
+        return node;
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a float.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, float value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a double.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, double value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a long.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, long value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a int.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, int value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a boolean.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, boolean value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a byte.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, byte value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a short.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, short value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a char.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, char value) {
+        return put(name, String.valueOf(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a {@link Color}.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, Color value) {
+        return put(name, VDFUtils.toColorString(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a {@link Vector3}.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, Vector3 value) {
+        return put(name, VDFUtils.toVector3String(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from a {@link Vector2}.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public VDFNode put (String name, Vector2 value) {
+        return put(name, VDFUtils.toVector2String(value));
+    }
+
+    /**
+     * Finds the node with the specified name and sets its value from an Enum.
+     * If the node is not found, a new one is created with the specified name and value and is added after the last child.
+     * @param name of the node to modify or create
+     * @param value of the node to modify or create
+     * @return the modified node */
+    public <T extends Enum<T>> VDFNode put (String name, T value) {
+        return put(name, value.name());
+    }
+
 
     /**
      * Iterates the children of this node. */

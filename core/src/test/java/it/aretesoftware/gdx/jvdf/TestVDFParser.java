@@ -204,6 +204,7 @@ public class TestVDFParser extends BaseTest {
         Assert.assertEquals(Color.WHITE, node.getColor(7));
         Assert.assertEquals(new Vector3(1, 1, 1), node.getVector3(8));
         Assert.assertEquals(new Vector2(0, 1), node.getVector2(9));
+        Assert.assertEquals(ExampleEnum.first, node.getEnum(10, ExampleEnum.class));
     }
 
     @Test

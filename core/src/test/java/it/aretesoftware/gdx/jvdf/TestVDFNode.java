@@ -36,12 +36,12 @@ public class TestVDFNode extends BaseTest {
 
     @Test
     public void testHas() {
-        VDFNode node = parser.parse(sample);
-        Assert.assertTrue(node.isNull());
-        Assert.assertFalse(node.hasParent());
-        Assert.assertNotNull(node.child());
+        VDFNode root = parser.parse(sample);
+        Assert.assertTrue(root.isNull());
+        Assert.assertFalse(root.hasParent());
+        Assert.assertNotNull(root.child());
 
-        node = node.get("root_node");
+        VDFNode node = root.get("root_node");
         Assert.assertTrue(node.isNull());
         Assert.assertTrue(node.hasParent());
         Assert.assertTrue(node.hasChild("first_sub_node"));
@@ -59,6 +59,8 @@ public class TestVDFNode extends BaseTest {
         Assert.assertNotNull(node.prev());
         Assert.assertNull(node.next());
         Assert.assertNull(node.child());
+
+        Assert.assertEquals(node.root(), root);
     }
 
     @Test
@@ -83,6 +85,8 @@ public class TestVDFNode extends BaseTest {
 
         node.addChild("fourth_sub_node", new VDFNode());
         Assert.assertEquals(3, node.size);
+        node.addChild("sixth_node", "value6");
+        Assert.assertEquals(node.get("sixth_node").asString(), "value6");
     }
 
     @Test
@@ -137,6 +141,25 @@ public class TestVDFNode extends BaseTest {
         Assert.assertEquals(node.asString(), "0.0 0.0");
         node.set(ExampleEnum.first);
         Assert.assertEquals(node.asString(), "first");
+    }
+
+    @Test
+    public void testPut() {
+        VDFNode root = new VDFNode();
+        root.addChild("node", "");
+        Assert.assertEquals(root.put("node", "test").asString(), "test");
+        Assert.assertEquals(root.put("node", 1.0f).asFloat(), 1.0f, 0.0f);
+        Assert.assertEquals(root.put("node", 1.0).asDouble(), 1.0, 0.0);
+        Assert.assertEquals(root.put("node", 1L).asLong(), 1L);
+        Assert.assertEquals(root.put("node", 1).asInt(), 1);
+        Assert.assertTrue(root.put("node", true).asBoolean());
+        Assert.assertEquals(root.put("node", (byte)1).asByte(), (byte)1);
+        Assert.assertEquals(root.put("node", (short)1).asShort(), (short)1);
+        Assert.assertEquals(root.put("node", 'a').asChar(), 'a');
+        Assert.assertEquals(root.put("node", Color.WHITE).asColor(), Color.WHITE);
+        Assert.assertEquals(root.put("node", Vector3.Zero).asVector3(), Vector3.Zero);
+        Assert.assertEquals(root.put("node", Vector2.Zero).asVector2(), Vector2.Zero);
+        Assert.assertEquals(root.put("node", ExampleEnum.first).asEnum(ExampleEnum.class), ExampleEnum.first);
     }
 
     @Test
