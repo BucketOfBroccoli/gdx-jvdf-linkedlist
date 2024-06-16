@@ -58,7 +58,7 @@ Then add gdx-jvdf-linkedlist as dependency in your core project:
 project(":core") {
     dependencies {
     	// ...
-        implementation 'com.github.BucketOfBroccoli:gdx-jvdf-linkedlist:1.0.0'
+        implementation 'com.github.BucketOfBroccoli:gdx-jvdf-linkedlist:2.0.0'
     }
 }
 ```
