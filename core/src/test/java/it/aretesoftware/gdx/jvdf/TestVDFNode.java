@@ -160,6 +160,16 @@ public class TestVDFNode extends BaseTest {
         Assert.assertEquals(root.put("node", Vector3.Zero).asVector3(), Vector3.Zero);
         Assert.assertEquals(root.put("node", Vector2.Zero).asVector2(), Vector2.Zero);
         Assert.assertEquals(root.put("node", ExampleEnum.first).asEnum(ExampleEnum.class), ExampleEnum.first);
+
+        VDFNode subNode = new VDFNode();
+        subNode.addChild("key1", "value1");
+        subNode.addChild("key2", "value2");
+        subNode.addChild("key3", "value3");
+
+        root = parser.parse(sample).get("root_node");
+        root.put("first_sub_node", subNode);
+        Assert.assertEquals(root.get("first_sub_node"), subNode);
+        Assert.assertEquals("first_sub_node", subNode.name());
     }
 
     @Test

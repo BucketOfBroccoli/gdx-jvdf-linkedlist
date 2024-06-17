@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -1298,6 +1297,40 @@ public class VDFNode {
     }
 
     /**
+     * Finds the node with the specified name and replaces it with another node of the same name.
+     * If the node is not found, it is added as a child.
+     * @param name of the node to modify or create
+     * @param value the node to replace or add as a child.
+     * @return the new node */
+    public VDFNode put (String name, VDFNode value) {
+        VDFNode current = get(name);
+        if (current != null) {
+            if (current.prev != null) {
+                current.prev.next = value;
+            }
+            if (current.next != null) {
+                current.next.prev = value;
+            }
+            if (child == current) {
+                child = value;
+            }
+            value.name = name;
+            value.prev = current.prev;
+            value.next = current.next;
+            value.parent = current.parent;
+            current.child = null;
+            current.parent = null;
+            current.prev = null;
+            current.next = null;
+            current.size = 0;
+        }
+        else {
+            addChild(name, value);
+        }
+        return value;
+    }
+
+    /**
      * Finds the node with the specified name and sets its value from a String.
      * If the node is not found, a new one is created with the specified name and value and is added after the last child.
      * @param name of the node to modify or create
@@ -1456,17 +1489,23 @@ public class VDFNode {
     }
 
     private String toVDFString(VDFNode root, VDFNode current, StringBuilder whitespace, StringBuilder builder) {
-        current = current.parent != null ? current : current.child;     // takes care of the root
+        current = current.parent != null
+                ? current
+                : current.child;     // takes care of the root
         while (current != null) {
             builder.append(whitespace);
-            builder.append("\"").append(current.name).append("\"");
-            builder.append(" ");
+            if (current.name != null) {
+                builder.append("\"").append(current.name).append("\"");
+                builder.append(" ");
+            }
             if (current.isEmpty() && !current.isNull()) {
                 builder.append("\"").append(current.value).append("\"");
             }
             else {
                 VDFNode child = current.child;
-                builder.append("\n");
+                if (current.name != null) {
+                    builder.append("\n");
+                }
                 builder.append(whitespace);
                 builder.append("{");
                 if (child != null) {
